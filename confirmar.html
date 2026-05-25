@@ -204,15 +204,13 @@
   .field label {
     display: block; font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.35em; color: var(--gold); text-transform: uppercase; margin-bottom: 0.6rem; opacity: 0.9;
   }
-  .field input, .field select {
+  .field input {
     width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,76,0.25); border-radius: 0; padding: 0.9rem 1.1rem; color: var(--cream); font-family: 'Cormorant Garamond', serif; font-size: 1rem; transition: border-color 0.3s, background 0.3s; outline: none; -webkit-appearance: none;
   }
-  .field input:focus, .field select:focus { border-color: var(--gold); background: rgba(201,168,76,0.05); }
-  .field input.error, .field select.error { border-color: var(--error); }
-  .field select option { background: var(--deep); color: var(--cream); }
+  .field input:focus { border-color: var(--gold); background: rgba(201,168,76,0.05); }
+  .field input.error { border-color: var(--error); }
   .field-error { display: none; font-size: 0.82rem; color: var(--error); margin-top: 0.4rem; font-style: italic; }
   .field-error.visible { display: block; }
-  .field-hint { font-size: 0.82rem; color: var(--gold-pale); margin-top: 0.4rem; font-style: italic; opacity: 0.6; }
 
   /* ── FAMÍLIA INPUT ── */
   .family-id-input-wrapper { display: grid; grid-template-columns: 1fr auto; gap: 0.5rem; align-items: start; }
@@ -226,17 +224,11 @@
   .member-card { border: 1px solid rgba(201,168,76,0.15); padding: 1.5rem; background: rgba(201,168,76,0.02); position: relative; animation: fadeUp 0.4s ease; }
   .member-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
   .member-number { font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.3em; color: var(--gold); text-transform: uppercase; }
-  .btn-remove-member { background: none; border: none; color: rgba(201,168,76,0.4); cursor: pointer; font-size: 1.2rem; line-height: 1; padding: 0.2rem; transition: color 0.2s; }
-  .btn-remove-member:hover { color: var(--error); }
   .member-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 
   @media (max-width: 500px) { .member-grid { grid-template-columns: 1fr; } }
 
   /* ── BOTÕES NAVEGAÇÃO ── */
-  .btn-add-member {
-    width: 100%; background: transparent; border: 1px dashed rgba(201,168,76,0.3); color: var(--gold-pale); font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; font-style: italic; padding: 1rem; cursor: pointer; transition: all 0.3s; margin-bottom: 2rem;
-  }
-  .btn-add-member:hover { border-color: rgba(201,168,76,0.7); background: rgba(201,168,76,0.05); color: var(--gold-light); }
   .form-actions { display: flex; gap: 1rem; justify-content: space-between; margin-top: 2rem; flex-wrap: wrap; }
   .btn-prev { flex: 0 0 auto; padding: 0.9rem 2rem; background: transparent; border: 1px solid rgba(201,168,76,0.3); color: rgba(201,168,76,0.6); font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; cursor: pointer; transition: all 0.3s; }
   .btn-prev:hover { border-color: var(--gold); color: var(--gold); }
@@ -325,7 +317,7 @@
     <div class="form-step" id="step-2">
       <span class="step-title">Passo 2 de 3</span>
       <h2 class="step-heading">Membros da Família</h2>
-      <p class="step-desc">Informe os dados das pessoas que irão comparecer à festa.</p>
+      <p class="step-desc">Confirme os dados das pessoas da família que irão comparecer à festa.</p>
       <div class="members-list" id="members-list"></div>
       <div class="form-actions">
         <button class="btn-prev" onclick="goToStep(1)">← Voltar</button>
@@ -362,54 +354,47 @@
   </div>
 </div>
 
-<script>
-function getFamilyCodes() {
-  try {
-    const saved = localStorage.getItem('rsvp_family_codes');
-    if (saved) return JSON.parse(saved);
-  } catch(e) {}
-  return {
-    'FELIPE-FAM01': { name: 'Família 01', members: [] },
-    'FELIPE-FAM02': { name: 'Família 02', members: [] },
-    'TESTE-FELIPE': { name: 'Família Teste', members: ['Convidado Exemplo 1'] },
-  };
-}
+<script type="module">
+import { db } from './firebase.js';
+import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
 let currentStep = 1; let verifiedCode = null; let verifiedFamilyName = null; let memberCount = 0;
 
-function getConfirmed() { try { return JSON.parse(localStorage.getItem('rsvp_confirmed') || '{}'); } catch { return {}; } }
-function saveConfirmation(code, data) { const confirmed = getConfirmed(); confirmed[code] = { ...data, confirmedAt: new Date().toISOString() }; localStorage.setItem('rsvp_confirmed', JSON.stringify(confirmed)); }
-function isConfirmed(code) { return !!getConfirmed()[code]; }
+function showStatus(id, msg, type) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.className = `status-box ${type} visible`;
+}
 
-function checkFamilyCode() {
+async function checkFamilyCode() {
   const input = document.getElementById('family-code');
   const code = input.value.trim().toUpperCase();
   const statusEl = document.getElementById('code-status');
   const errEl = document.getElementById('err-family-code');
   const btn = document.getElementById('btn-step1-next');
-  const currentCodes = getFamilyCodes();
 
   errEl.textContent = ''; errEl.classList.remove('visible'); statusEl.className = 'status-box';
 
   if (!code) { errEl.textContent = 'Por favor, insira o código da família.'; errEl.classList.add('visible'); input.classList.add('error'); return; }
   input.classList.remove('error');
 
-  if (!currentCodes[code]) {
+  const confSnap = await getDoc(doc(db, 'confirmacoes', code));
+  if (confSnap.exists()) {
+    const data = confSnap.data();
+    const dateStr = new Date(data.confirmedAt).toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
+    showBlockedScreen(data.familyName, dateStr, data.members);
+    return;
+  }
+
+  const famSnap = await getDoc(doc(db, 'familias', code));
+  if (!famSnap.exists()) {
     statusEl.textContent = '✗ Código não encontrado. Verifique o seu convite.';
     statusEl.className = 'status-box error visible';
     btn.disabled = true; btn.style.opacity = '0.4'; return;
   }
 
-  if (isConfirmed(code)) {
-    const data = getConfirmed()[code];
-    const date = new Date(data.confirmedAt);
-    const dateStr = date.toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
-    const famName = typeof currentCodes[code] === 'object' ? currentCodes[code].name : currentCodes[code];
-    showBlockedScreen(famName, dateStr, data.members); return;
-  }
-
   verifiedCode = code;
-  verifiedFamilyName = typeof currentCodes[code] === 'object' ? currentCodes[code].name : currentCodes[code];
+  verifiedFamilyName = famSnap.data().name;
   statusEl.textContent = `✓ ${verifiedFamilyName} encontrada!`;
   statusEl.className = 'status-box success visible';
   btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer';
@@ -430,51 +415,38 @@ function showBlockedScreen(familyName, dateStr, members) {
   card.appendChild(blocked);
 }
 
-function addMember(defaultName = '') {
-  memberCount++;
+function addReadOnlyMember(nomeCompleto, index) {
   const list = document.getElementById('members-list');
   const card = document.createElement('div');
   card.className = 'member-card';
   card.innerHTML = `
-    <div class="member-card-header"><span class="member-number">Membro ${memberCount}</span>${memberCount > 1 ? `<button class="btn-remove-member" onclick="removeMember(this)">×</button>` : ''}</div>
+    <div class="member-card-header"><span class="member-number">Membro ${index}</span></div>
     <div class="member-grid">
-      <div class="field"><label>Nome Completo *</label><input type="text" class="member-nome" placeholder="Nome e sobrenome" value="${defaultName}"><div class="field-error err-nome"></div></div>
-      <div class="field"><label>Data de Nascimento *</label><input type="date" class="member-nasc"><div class="field-error err-nasc"></div></div>
+      <div class="field">
+        <label>Nome Completo</label>
+        <input type="text" class="member-nome" value="${nomeCompleto}" readonly style="background:rgba(255,255,255,0.02); border-color:rgba(201,168,76,0.1); color:rgba(255,255,255,0.6); cursor:not-allowed;">
+      </div>
+      <div class="field">
+        <label>Data de Nascimento *</label>
+        <input type="date" class="member-nasc">
+        <div class="field-error err-nasc"></div>
+      </div>
     </div>`;
   list.appendChild(card);
 }
 
-function removeMember(btn) { btn.closest('.member-card').remove(); document.querySelectorAll('.member-card').forEach((c, i) => { c.querySelector('.member-number').textContent = `Membro ${i + 1}`; }); memberCount = document.querySelectorAll('.member-card').length; }
-
-function ensureFirstMember() {
-  if (document.querySelectorAll('.member-card').length === 0) {
-    const currentCodes = getFamilyCodes();
-    const preMembers = currentCodes[verifiedCode]?.members || [];
-    if (preMembers.length > 0) {
-      preMembers.forEach(mName => addMember(mName));
-    } else {
-      addMember();
-    }
+async function ensureFirstMember() {
+  const list = document.getElementById('members-list');
+  list.innerHTML = '';
+  
+  const famRef = await getDoc(doc(db, 'familias', verifiedCode));
+  const preMembers = famRef.data().members || [];
+  
+  if (preMembers.length > 0) {
+    preMembers.forEach((mName, i) => addReadOnlyMember(mName, i + 1));
+  } else {
+    addReadOnlyMember("Convidado Principal", 1);
   }
-}
-
-const _goToStep = goToStep;
-window.goToStep = function(step) { if (step === 2) ensureFirstMember(); _goToStep(step); };
-
-function updateStepIndicator(step) {
-  for (let i = 1; i <= 3; i++) {
-    const dot = document.getElementById(`dot-${i}`); dot.className = 'step-dot';
-    if (i < step) dot.classList.add('done'); else if (i === step) dot.classList.add('active');
-  }
-  for (let i = 1; i <= 2; i++) { const line = document.getElementById(`line-${i}`); line.className = 'step-line'; if (i < step) line.classList.add('done'); }
-}
-
-function goToStep(step) {
-  if (step === 2 && !validateStep1()) return; if (step === 3 && !validateStep2()) return;
-  if (step === 3) buildReview();
-  document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
-  document.getElementById(`step-${step}`).classList.add('active'); currentStep = step; updateStepIndicator(step);
-  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function validateStep1() { return !!verifiedCode; }
@@ -483,8 +455,7 @@ function validateStep2() {
   const members = document.querySelectorAll('.member-card'); if (members.length === 0) return false;
   let valid = true;
   members.forEach(card => {
-    const nInp = card.querySelector('.member-nome'); const dInp = card.querySelector('.member-nasc');
-    if (!nInp.value.trim() || nInp.value.trim().split(' ').length < 2) { nInp.classList.add('error'); valid = false; } else nInp.classList.remove('error');
+    const dInp = card.querySelector('.member-nasc');
     if (!dInp.value) { dInp.classList.add('error'); valid = false; } else dInp.classList.remove('error');
   });
   return valid;
@@ -506,7 +477,36 @@ function buildReview() {
   document.getElementById('review-box').innerHTML = `<div class="success-names"><span class="success-names-title">Família: ${verifiedFamilyName}</span>` + members.map(m => `<div class="success-name-item"><span>${m.nome}</span><span style="color:var(--gold)">${m.nascimento}</span></div>`).join('') + `</div>`;
 }
 
-function submitRSVP() { const members = getMembersData(); const obs = document.getElementById('obs').value.trim(); const data = { familyCode: verifiedCode, familyName: verifiedFamilyName, members, obs }; saveConfirmation(verifiedCode, data); showSuccess(data); }
+function goToStep(step) {
+  if (step === 2 && !validateStep1()) return; if (step === 3 && !validateStep2()) return;
+  if (step === 3) buildReview();
+  document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+  document.getElementById(`step-${step}`).classList.add('active'); currentStep = step; updateStepIndicator(step);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateStepIndicator(step) {
+  for (let i = 1; i <= 3; i++) {
+    const dot = document.getElementById(`dot-${i}`); dot.className = 'step-dot';
+    if (i < step) dot.classList.add('done'); else if (i === step) dot.classList.add('active');
+  }
+  for (let i = 1; i <= 2; i++) { const line = document.getElementById(`line-${i}`); line.className = 'step-line'; if (i < step) line.classList.add('done'); }
+}
+
+async function submitRSVP() {
+  const members = getMembersData();
+  const obs = document.getElementById('obs').value.trim();
+
+  await setDoc(doc(db, 'confirmacoes', verifiedCode), {
+    familyCode: verifiedCode,
+    familyName: verifiedFamilyName,
+    members,
+    obs,
+    confirmedAt: new Date().toISOString()
+  });
+
+  showSuccess({ familyName: verifiedFamilyName, members });
+}
 
 function showSuccess(data) {
   document.querySelectorAll('.form-step').forEach(s => s.style.display = 'none'); if (document.getElementById('steps-indicator')) document.getElementById('steps-indicator').style.display = 'none';
@@ -527,7 +527,13 @@ function draw() {
   requestAnimationFrame(draw);
 }
 draw();
+
 document.getElementById('family-code').addEventListener('input', function() { this.value = this.value.toUpperCase(); });
+
+// Expor funções globais para o HTML modificado
+window.checkFamilyCode = checkFamilyCode;
+window.goToStep = function(step) { if (step === 2) ensureFirstMember(); goToStep(step); };
+window.submitRSVP = submitRSVP;
 </script>
 </body>
 </html>
