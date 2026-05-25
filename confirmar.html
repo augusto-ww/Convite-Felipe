@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confirmar Presença · 1º Aniversário do Felipe 👑</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cinzel:wght@400;500&family=Dancing+Script:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --night: #050b18;
+    --deep: #071224;
+    --navy: #0a1a35;
+    --indigo: #1a2d55;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --gold-pale: #f5e4b0;
+    --cream: #fdf8ee;
+    --rose: #d4606a;
+    --error: #e05555;
+    --success: #4a9a6a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #061428;
+    color: var(--cream);
+    font-family: 'Cormorant Garamond', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  canvas#starfield {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .nebula {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.05;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .nebula-1 { width: 500px; height: 500px; background: #3a5fa0; top: -100px; right: -100px; }
+  .nebula-2 { width: 400px; height: 400px; background: #8b3a6b; bottom: -50px; left: -100px; }
+
+  /* ── LAYOUT ── */
+  .page-wrap {
+    position: relative;
+    z-index: 2;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 1.5rem 5rem;
+  }
+
+  /* ── HEADER ── */
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    animation: fadeUp 1s 0.2s ease both;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    text-decoration: none;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+  }
+  .back-link:hover { opacity: 1; }
+
+  .page-ornament {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .page-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 300;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+
+  .page-title em { font-style: italic; color: var(--gold-light); }
+
+  .page-subtitle {
+    font-size: 1rem;
+    color: var(--gold-pale);
+    font-weight: 300;
+    font-style: italic;
+    opacity: 0.8;
+  }
+
+  .divider {
+    width: 80px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    margin: 1.5rem auto;
+  }
+
+  /* ── CARD PRINCIPAL ── */
+  .form-card {
+    width: 100%;
+    max-width: 680px;
+    border: 1px solid rgba(201,168,76,0.2);
+    background: rgba(5,11,24,0.7);
+    backdrop-filter: blur(20px);
+    padding: 3rem 2.5rem;
+    position: relative;
+    animation: fadeUp 1s 0.5s ease both;
+  }
+
+  .form-card::before, .form-card::after,
+  .form-card .corner-br, .form-card .corner-tl-inner {
+    content: '';
+    position: absolute;
+    width: 18px; height: 18px;
+    border-color: var(--gold);
+    border-style: solid;
+    opacity: 0.5;
+  }
+  .form-card::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+  .form-card::after { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
+
+  /* ── PASSOS ── */
+  .steps-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .step-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid rgba(201,168,76,0.3);
+    transition: all 0.4s;
+  }
+  .step-dot.active {
+    background: var(--gold);
+    box-shadow: 0 0 10px rgba(201,168,76,0.5);
+  }
+  .step-dot.done {
+    background: rgba(201,168,76,0.5);
+  }
+
+  .step-line {
+    width: 40px; height: 1px;
+    background: rgba(201,168,76,0.2);
+    transition: background 0.4s;
+  }
+  .step-line.done { background: rgba(201,168,76,0.5); }
+
+  /* ── FORMULÁRIO ── */
+  .form-step { display: none; }
+  .form-step.active { display: block; animation: fadeUp 0.5s ease; }
+
+  .step-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .step-heading {
+    font-size: 1.6rem;
+    font-weight: 300;
+    font-style: italic;
+    margin-bottom: 0.5rem;
+    color: var(--cream);
+  }
+
+  .step-desc {
+    font-size: 0.95rem;
+    color: var(--gold-pale);
+    font-style: italic;
+    opacity: 0.7;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  /* ── INPUTS ── */
+  .field {
+    margin-bottom: 1.5rem;
+  }
+
+  .field label {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+    opacity: 0.9;
+  }
+
+  .field input, .field select {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 0;
+    padding: 0.9rem 1.1rem;
+    color: var(--cream);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    transition: border-color 0.3s, background 0.3s;
+    outline: none;
+    -webkit-appearance: none;
+  }
+
+  .field input:focus, .field select:focus {
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.05);
+  }
+
+  .field input.error, .field select.error {
+    border-color: var(--error);
+  }
+
+  .field select option {
+    background: var(--deep);
+    color: var(--cream);
+  }
+
+  .field-error {
+    display: none;
+    font-size: 0.82rem;
+    color: var(--error);
+    margin-top: 0.4rem;
+    font-style: italic;
+  }
+  .field-error.visible { display: block; }
+
+  .field-hint {
+    font-size: 0.82rem;
+    color: var(--gold-pale);
+    margin-top: 0.4rem;
+    font-style: italic;
+    opacity: 0.6;
+  }
+
+  /* ── FAMÍLIA INPUT ── */
+  .family-id-input-wrapper {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.5rem;
+    align-items: start;
+  }
+
+  .btn-check-family {
+    padding: 0.9rem 1.2rem;
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+  }
+  .btn-check-family:hover { background: rgba(201,168,76,0.1); }
+
+  /* ── MEMBROS ── */
+  .members-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .member-card {
+    border: 1px solid rgba(201,168,76,0.15);
+    padding: 1.5rem;
+    background: rgba(201,168,76,0.02);
+    position: relative;
+    animation: fadeUp 0.4s ease;
+  }
+
+  .member-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .member-number {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  .btn-remove-member {
+    background: none;
+    border: none;
+    color: rgba(201,168,76,0.4);
+    cursor: pointer;
+    font-size: 1.2rem;
+    line-height: 1;
+    padding: 0.2rem;
+    transition: color 0.2s;
+  }
+  .btn-remove-member:hover { color: var(--error); }
+
+  .member-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  @media (max-width: 500px) { .member-grid { grid-template-columns: 1fr; } }
+
+  /* ── BOTÃO ADICIONAR ── */
+  .btn-add-member {
+    width: 100%;
+    background: transparent;
+    border: 1px dashed rgba(201,168,76,0.3);
+    color: var(--gold-pale);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    font-style: italic;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-bottom: 2rem;
+  }
+  .btn-add-member:hover {
+    border-color: rgba(201,168,76,0.7);
+    background: rgba(201,168,76,0.05);
+    color: var(--gold-light);
+  }
+
+  /* ── BOTÕES NAVEGAÇÃO ── */
+  .form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-prev {
+    flex: 0 0 auto;
+    padding: 0.9rem 2rem;
+    background: transparent;
+    border: 1px solid rgba(201,168,76,0.3);
+    color: rgba(201,168,76,0.6);
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .btn-prev:hover { border-color: var(--gold); color: var(--gold); }
+
+  .btn-next, .btn-submit {
+    flex: 1;
+    padding: 1rem 2rem;
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold-light);
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: color 0.4s;
+  }
+
+  .btn-next::before, .btn-submit::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gold);
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+    z-index: 0;
+  }
+  .btn-next:hover::before, .btn-submit:hover::before { transform: translateX(0); }
+  .btn-next:hover, .btn-submit:hover { color: var(--night); }
+  .btn-next span, .btn-submit span { position: relative; z-index: 1; }
+
+  /* ── STATUS MESSAGES ── */
+  .status-box {
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+    font-style: italic;
+    display: none;
+  }
+  .status-box.info { border-left: 3px solid var(--gold); color: var(--gold-pale); background: rgba(201,168,76,0.05); }
+  .status-box.error { border-left: 3px solid var(--error); color: #f09090; background: rgba(224,85,85,0.05); }
+  .status-box.success { border-left: 3px solid var(--success); color: #90d4a8; background: rgba(74,154,106,0.05); }
+  .status-box.visible { display: block; }
+
+  /* ── BLOQUEADO ── */
+  .blocked-msg {
+    text-align: center;
+    padding: 3rem 2rem;
+  }
+  .blocked-icon { font-size: 3rem; display: block; margin-bottom: 1.5rem; }
+  .blocked-title { font-size: 1.8rem; font-weight: 300; font-style: italic; margin-bottom: 1rem; }
+  .blocked-text { font-size: 1rem; color: var(--gold-pale); line-height: 1.8; opacity: 0.8; }
+
+  /* ── SUCESSO ── */
+  .success-screen {
+    display: none;
+    text-align: center;
+    animation: fadeUp 0.8s ease;
+  }
+  .success-screen.visible { display: block; }
+
+  .success-icon {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: 1.5rem;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
+
+  .success-title {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 300;
+    font-style: italic;
+    margin-bottom: 1rem;
+    color: var(--gold-light);
+  }
+
+  .success-text {
+    font-size: 1.05rem;
+    color: var(--gold-pale);
+    line-height: 1.9;
+    margin-bottom: 1.5rem;
+    opacity: 0.85;
+  }
+
+  .success-names {
+    border: 1px solid rgba(201,168,76,0.2);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    background: rgba(201,168,76,0.03);
+  }
+
+  .success-names-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .success-name-item {
+    font-size: 1rem;
+    color: var(--cream);
+    padding: 0.4rem 0;
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+    display: flex;
+    justify-content: space-between;
+  }
+  .success-name-item:last-child { border-bottom: none; }
+
+  .success-quote {
+    font-style: italic;
+    color: var(--gold-pale);
+    font-size: 1rem;
+    line-height: 1.7;
+    opacity: 0.7;
+    margin-top: 2rem;
+  }
+
+  /* ── ANIMAÇÕES ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── ESTRELAS ── */
+  .twinkle-fixed {
+    position: fixed;
+    background: white;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+    animation: twinkle-anim linear infinite;
+  }
+  @keyframes twinkle-anim {
+    0%, 100% { opacity: 0.1; }
+    50% { opacity: 0.9; }
+  }
+
+  @media (max-width: 600px) {
+    .form-card { padding: 2rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+<div class="nebula nebula-1"></div>
+<div class="nebula nebula-2"></div>
+
+<div class="page-wrap">
+
+  <header class="page-header">
+    <a href="index.html" class="back-link">← Voltar ao convite</a>
+    <span class="page-ornament">✦</span>
+    <h1 class="page-title">Confirmar <em>Presença</em></h1>
+    <div class="divider"></div>
+    <p class="page-subtitle">"O que é essencial é invisível aos olhos."</p>
+  </header>
+
+  <!-- CARD PRINCIPAL -->
+  <div class="form-card" id="main-card">
+
+    <!-- INDICADOR DE PASSOS -->
+    <div class="steps-indicator" id="steps-indicator">
+      <div class="step-dot active" id="dot-1"></div>
+      <div class="step-line" id="line-1"></div>
+      <div class="step-dot" id="dot-2"></div>
+      <div class="step-line" id="line-2"></div>
+      <div class="step-dot" id="dot-3"></div>
+    </div>
+
+    <!-- STATUS GLOBAL -->
+    <div class="status-box" id="global-status"></div>
+
+    <!-- ── PASSO 1: IDENTIFICAÇÃO DA FAMÍLIA ── -->
+    <div class="form-step active" id="step-1">
+      <span class="step-title">Passo 1 de 3</span>
+      <h2 class="step-heading">Identificação da Família</h2>
+      <p class="step-desc">
+        Digite o código da família que você recebeu no convite. Cada família só pode confirmar uma vez.
+      </p>
+
+      <div class="field">
+        <label for="family-code">Código da Família</label>
+        <div class="family-id-input-wrapper">
+          <input type="text" id="family-code" placeholder="Ex: SILVA-2025" autocomplete="off" style="text-transform:uppercase">
+          <button class="btn-check-family" onclick="checkFamilyCode()">Verificar</button>
+        </div>
+        <div class="field-error" id="err-family-code"></div>
+        <p class="field-hint">O código está no seu convite impresso ou na mensagem que você recebeu.</p>
+      </div>
+
+      <div class="status-box" id="code-status"></div>
+
+      <div class="form-actions">
+        <div></div>
+        <button class="btn-next" onclick="goToStep(2)" id="btn-step1-next" disabled style="opacity:0.4;cursor:not-allowed">
+          <span>Continuar →</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ── PASSO 2: MEMBROS DA FAMÍLIA ── -->
+    <div class="form-step" id="step-2">
+      <span class="step-title">Passo 2 de 3</span>
+      <h2 class="step-heading">Membros da Família</h2>
+      <p class="step-desc">
+        Informe o nome completo e data de nascimento de cada membro da família que irá comparecer. O número de membros não pode ser alterado após o envio.
+      </p>
+
+      <div class="members-list" id="members-list">
+        <!-- Membros adicionados dinamicamente -->
+      </div>
+
+      <button class="btn-add-member" onclick="addMember()">
+        + Adicionar membro da família
+      </button>
+
+      <div class="form-actions">
+        <button class="btn-prev" onclick="goToStep(1)">← Voltar</button>
+        <button class="btn-next" onclick="goToStep(3)"><span>Continuar →</span></button>
+      </div>
+    </div>
+
+    <!-- ── PASSO 3: CONFIRMAÇÃO ── -->
+    <div class="form-step" id="step-3">
+      <span class="step-title">Passo 3 de 3</span>
+      <h2 class="step-heading">Revisar & Confirmar</h2>
+      <p class="step-desc">
+        Revise os dados antes de confirmar. Após o envio, não será possível editar.
+      </p>
+
+      <div class="status-box info visible" style="margin-bottom:1.5rem">
+        ⚠️ Esta ação é irreversível. Após confirmar, a presença da sua família ficará registrada e o código bloqueado.
+      </div>
+
+      <div id="review-box" style="margin-bottom:2rem">
+        <!-- Resumo gerado dinamicamente -->
+      </div>
+
+      <div class="field">
+        <label for="obs">Observações / Restrições alimentares</label>
+        <input type="text" id="obs" placeholder="Ex: alergia a glúten, vegetariano...">
+        <p class="field-hint">Opcional — informe qualquer necessidade especial.</p>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn-prev" onclick="goToStep(2)">← Voltar</button>
+        <button class="btn-submit" onclick="submitRSVP()"><span>✓ Confirmar Presença</span></button>
+      </div>
+    </div>
+
+    <!-- ── TELA DE SUCESSO ── -->
+    <div class="success-screen" id="success-screen">
+      <span class="success-icon">🌟</span>
+      <h2 class="success-title">Presença Confirmada!</h2>
+      <p class="success-text">
+        Como as estrelas que brilham mesmo quando não as vemos,<br>
+        guardamos um lugar especial para vocês nesta noite mágica.
+      </p>
+
+      <div class="success-names" id="success-names-box">
+        <!-- Preenchido dinamicamente -->
+      </div>
+
+      <p class="success-quote">
+        "Tu te tornas eternamente responsável por aquilo que cativas.<br>
+        Tu és responsável pela tua rosa..."<br><br>
+        — Antoine de Saint-Exupéry
+      </p>
+    </div>
+
+  </div><!-- /form-card -->
+
+</div><!-- /page-wrap -->
+
+<script>
+// ══════════════════════════════════════════════
+//  CONFIGURAÇÃO — CÓDIGOS DE FAMÍLIA VÁLIDOS
+//  Edite este objeto para gerenciar os convidados
+// ══════════════════════════════════════════════
+const FAMILY_CODES = {
+  // ─── CONVIDADOS DO FELIPE ───────────────────────────────
+  // Edite e adicione as famílias conforme sua lista de convidados
+  // Formato: 'CODIGO': 'Nome da Família'
+  // O código é o que você vai enviar no convite para cada família
+
+  'FELIPE-FAM01': 'Família 01',
+  'FELIPE-FAM02': 'Família 02',
+  'FELIPE-FAM03': 'Família 03',
+  'FELIPE-FAM04': 'Família 04',
+  'FELIPE-FAM05': 'Família 05',
+  'FELIPE-FAM06': 'Família 06',
+  'FELIPE-FAM07': 'Família 07',
+  'FELIPE-FAM08': 'Família 08',
+  'FELIPE-FAM09': 'Família 09',
+  'FELIPE-FAM10': 'Família 10',
+
+  // Exemplos com nomes reais (substitua pelos seus convidados):
+  // 'SILVA-001':    'Família Silva',
+  // 'SANTOS-002':   'Família Santos',
+  // 'OLIVEIRA-003': 'Família Oliveira',
+
+  // Código de teste para você verificar o funcionamento:
+  'TESTE-FELIPE': 'Família Teste',
+};
+
+// ══════════════════════════════════════════════
+//  ESTADO
+// ══════════════════════════════════════════════
+let currentStep = 1;
+let verifiedCode = null;
+let verifiedFamilyName = null;
+let memberCount = 0;
+
+// ══════════════════════════════════════════════
+//  LOCAL STORAGE — PERSISTÊNCIA DE RSVPs
+// ══════════════════════════════════════════════
+function getConfirmed() {
+  try {
+    return JSON.parse(localStorage.getItem('rsvp_confirmed') || '{}');
+  } catch { return {}; }
+}
+
+function saveConfirmation(code, data) {
+  const confirmed = getConfirmed();
+  confirmed[code] = { ...data, confirmedAt: new Date().toISOString() };
+  localStorage.setItem('rsvp_confirmed', JSON.stringify(confirmed));
+}
+
+function isConfirmed(code) {
+  return !!getConfirmed()[code];
+}
+
+// ══════════════════════════════════════════════
+//  VERIFICAR CÓDIGO
+// ══════════════════════════════════════════════
+function checkFamilyCode() {
+  const input = document.getElementById('family-code');
+  const code = input.value.trim().toUpperCase();
+  const statusEl = document.getElementById('code-status');
+  const errEl = document.getElementById('err-family-code');
+  const btn = document.getElementById('btn-step1-next');
+
+  errEl.textContent = '';
+  errEl.classList.remove('visible');
+  statusEl.className = 'status-box';
+
+  if (!code) {
+    errEl.textContent = 'Por favor, insira o código da família.';
+    errEl.classList.add('visible');
+    input.classList.add('error');
+    return;
+  }
+
+  input.classList.remove('error');
+
+  // Código inválido
+  if (!FAMILY_CODES[code]) {
+    statusEl.textContent = '✗ Código não encontrado. Verifique o convite ou entre em contato com os anfitriões.';
+    statusEl.className = 'status-box error visible';
+    btn.disabled = true;
+    btn.style.opacity = '0.4';
+    btn.style.cursor = 'not-allowed';
+    return;
+  }
+
+  // Já confirmou
+  if (isConfirmed(code)) {
+    const data = getConfirmed()[code];
+    const date = new Date(data.confirmedAt);
+    const dateStr = date.toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
+    showBlockedScreen(FAMILY_CODES[code], dateStr, data.members);
+    return;
+  }
+
+  // Válido e disponível!
+  verifiedCode = code;
+  verifiedFamilyName = FAMILY_CODES[code];
+
+  statusEl.textContent = `✓ ${verifiedFamilyName} encontrada! Clique em continuar.`;
+  statusEl.className = 'status-box success visible';
+
+  btn.disabled = false;
+  btn.style.opacity = '1';
+  btn.style.cursor = 'pointer';
+}
+
+function showBlockedScreen(familyName, dateStr, members) {
+  const card = document.getElementById('main-card');
+  const indicator = document.getElementById('steps-indicator');
+  if (indicator) indicator.style.display = 'none';
+  document.getElementById('global-status').className = 'status-box';
+
+  // Esconde todos os passos
+  document.querySelectorAll('.form-step').forEach(s => s.style.display = 'none');
+
+  const memberList = members ? members.map(m =>
+    `<li style="padding:0.3rem 0;border-bottom:1px solid rgba(201,168,76,0.1);font-size:0.95rem;">${m.nome} <span style="color:var(--gold);font-size:0.8rem;">${m.nascimento || ''}</span></li>`
+  ).join('') : '';
+
+  const blocked = document.createElement('div');
+  blocked.className = 'blocked-msg';
+  blocked.innerHTML = `
+    <span class="blocked-icon">🔒</span>
+    <h2 class="blocked-title">Presença já confirmada</h2>
+    <p class="blocked-text" style="margin-bottom:1.5rem">
+      A <strong style="color:var(--gold-light)">${familyName}</strong> já confirmou presença em <em>${dateStr}</em>.
+      Cada família pode confirmar apenas uma vez.
+    </p>
+    ${members ? `<div class="success-names" style="margin:1.5rem auto;max-width:400px;text-align:left">
+      <span class="success-names-title">Membros confirmados</span>
+      <ul style="list-style:none;padding:0">${memberList}</ul>
+    </div>` : ''}
+    <p class="blocked-text" style="margin-top:1rem">
+      Se precisar fazer alguma alteração, entre em contato diretamente com os anfitriões.
+    </p>
+    <a href="index.html" style="display:inline-block;margin-top:2rem;color:var(--gold);font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.3em;text-decoration:none;text-transform:uppercase;opacity:0.8">
+      ← Voltar ao convite
+    </a>
+  `;
+  card.appendChild(blocked);
+}
+
+// ══════════════════════════════════════════════
+//  PASSOS
+// ══════════════════════════════════════════════
+function updateStepIndicator(step) {
+  for (let i = 1; i <= 3; i++) {
+    const dot = document.getElementById(`dot-${i}`);
+    dot.className = 'step-dot';
+    if (i < step) dot.classList.add('done');
+    else if (i === step) dot.classList.add('active');
+  }
+  for (let i = 1; i <= 2; i++) {
+    const line = document.getElementById(`line-${i}`);
+    line.className = 'step-line';
+    if (i < step) line.classList.add('done');
+  }
+}
+
+function goToStep(step) {
+  if (step === 2 && !validateStep1()) return;
+  if (step === 3 && !validateStep2()) return;
+
+  if (step === 3) buildReview();
+
+  document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+  document.getElementById(`step-${step}`).classList.add('active');
+  currentStep = step;
+  updateStepIndicator(step);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ══════════════════════════════════════════════
+//  VALIDAÇÕES
+// ══════════════════════════════════════════════
+function validateStep1() {
+  if (!verifiedCode) {
+    showStatus('code-status', 'Por favor, verifique o código da família antes de continuar.', 'error');
+    return false;
+  }
+  return true;
+}
+
+function validateStep2() {
+  const members = document.querySelectorAll('.member-card');
+  if (members.length === 0) {
+    alert('Por favor, adicione ao menos um membro da família.');
+    return false;
+  }
+
+  let valid = true;
+  members.forEach((card, idx) => {
+    const nomeInput = card.querySelector('.member-nome');
+    const nascInput = card.querySelector('.member-nasc');
+
+    const nome = nomeInput.value.trim();
+    const nasc = nascInput.value.trim();
+
+    // Reset
+    nomeInput.classList.remove('error');
+    nascInput.classList.remove('error');
+
+    if (!nome || nome.split(' ').filter(p => p).length < 2) {
+      nomeInput.classList.add('error');
+      const errEl = card.querySelector('.err-nome');
+      if (errEl) { errEl.textContent = 'Por favor, informe o nome completo (mínimo dois nomes).'; errEl.classList.add('visible'); }
+      valid = false;
+    } else {
+      const errEl = card.querySelector('.err-nome');
+      if (errEl) errEl.classList.remove('visible');
+    }
+
+    if (!nasc) {
+      nascInput.classList.add('error');
+      const errEl = card.querySelector('.err-nasc');
+      if (errEl) { errEl.textContent = 'Por favor, informe a data de nascimento.'; errEl.classList.add('visible'); }
+      valid = false;
+    } else {
+      const errEl = card.querySelector('.err-nasc');
+      if (errEl) errEl.classList.remove('visible');
+    }
+  });
+
+  return valid;
+}
+
+// ══════════════════════════════════════════════
+//  MEMBROS
+// ══════════════════════════════════════════════
+function addMember() {
+  memberCount++;
+  const list = document.getElementById('members-list');
+  const card = document.createElement('div');
+  card.className = 'member-card';
+  card.dataset.id = memberCount;
+  card.innerHTML = `
+    <div class="member-card-header">
+      <span class="member-number">Membro ${memberCount}</span>
+      ${memberCount > 1 ? `<button class="btn-remove-member" onclick="removeMember(this)" title="Remover">×</button>` : ''}
+    </div>
+    <div class="member-grid">
+      <div class="field" style="margin-bottom:0">
+        <label>Nome Completo *</label>
+        <input type="text" class="member-nome" placeholder="Nome e sobrenome">
+        <div class="field-error err-nome"></div>
+      </div>
+      <div class="field" style="margin-bottom:0">
+        <label>Data de Nascimento *</label>
+        <input type="date" class="member-nasc" max="${new Date().toISOString().split('T')[0]}">
+        <div class="field-error err-nasc"></div>
+      </div>
+    </div>
+  `;
+  list.appendChild(card);
+  card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function removeMember(btn) {
+  const card = btn.closest('.member-card');
+  card.remove();
+  // Re-numera
+  document.querySelectorAll('.member-card').forEach((c, i) => {
+    c.querySelector('.member-number').textContent = `Membro ${i + 1}`;
+  });
+  memberCount = document.querySelectorAll('.member-card').length;
+}
+
+// Adiciona o primeiro membro ao entrar no passo 2
+document.getElementById('step-2').addEventListener('animationend', () => {}, { once: true });
+
+function ensureFirstMember() {
+  if (document.querySelectorAll('.member-card').length === 0) {
+    addMember();
+  }
+}
+
+// Override goToStep para garantir primeiro membro
+const _goToStep = goToStep;
+window.goToStep = function(step) {
+  if (step === 2) ensureFirstMember();
+  _goToStep(step);
+};
+
+// ══════════════════════════════════════════════
+//  REVISÃO
+// ══════════════════════════════════════════════
+function getMembersData() {
+  const members = [];
+  document.querySelectorAll('.member-card').forEach((card, idx) => {
+    const nome = card.querySelector('.member-nome').value.trim();
+    const nascRaw = card.querySelector('.member-nasc').value;
+    let nascFormatted = '';
+    if (nascRaw) {
+      const [y,m,d] = nascRaw.split('-');
+      nascFormatted = `${d}/${m}/${y}`;
+    }
+    members.push({ nome, nascimento: nascFormatted, nascRaw });
+  });
+  return members;
+}
+
+function buildReview() {
+  const members = getMembersData();
+  const box = document.getElementById('review-box');
+  const rows = members.map(m => `
+    <div class="success-name-item">
+      <span>${m.nome}</span>
+      <span style="color:var(--gold);font-size:0.9rem">${m.nascimento}</span>
+    </div>
+  `).join('');
+
+  box.innerHTML = `
+    <div class="success-names">
+      <span class="success-names-title">Família: ${verifiedFamilyName} · ${members.length} membro${members.length !== 1 ? 's' : ''}</span>
+      ${rows}
+    </div>
+  `;
+}
+
+// ══════════════════════════════════════════════
+//  ENVIO
+// ══════════════════════════════════════════════
+function submitRSVP() {
+  const members = getMembersData();
+  const obs = document.getElementById('obs').value.trim();
+
+  const data = {
+    familyCode: verifiedCode,
+    familyName: verifiedFamilyName,
+    members,
+    obs,
+  };
+
+  saveConfirmation(verifiedCode, data);
+  showSuccess(data);
+}
+
+function showSuccess(data) {
+  // Esconde passos e indicador
+  document.querySelectorAll('.form-step').forEach(s => s.style.display = 'none');
+  document.getElementById('steps-indicator').style.display = 'none';
+
+  const screen = document.getElementById('success-screen');
+  screen.classList.add('visible');
+
+  const namesBox = document.getElementById('success-names-box');
+  const rows = data.members.map(m => `
+    <div class="success-name-item">
+      <span>${m.nome}</span>
+      <span style="color:var(--gold);font-size:0.9rem">${m.nascimento}</span>
+    </div>
+  `).join('');
+
+  namesBox.innerHTML = `
+    <span class="success-names-title">${data.familyName} · ${data.members.length} membro${data.members.length !== 1 ? 's' : ''} confirmado${data.members.length !== 1 ? 's' : ''}</span>
+    ${rows}
+    ${data.obs ? `<div style="margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(201,168,76,0.1);font-style:italic;color:var(--gold-pale);font-size:0.9rem">Obs: ${data.obs}</div>` : ''}
+  `;
+
+  // Confete de estrelas
+  for (let i = 0; i < 30; i++) {
+    setTimeout(() => createStar(), i * 100);
+  }
+}
+
+function createStar() {
+  const el = document.createElement('div');
+  el.style.cssText = `
+    position:fixed;z-index:999;pointer-events:none;
+    left:${Math.random()*100}vw;top:-20px;
+    font-size:${10+Math.random()*20}px;
+    animation:fall ${2+Math.random()*2}s ease-in forwards;
+    opacity:0.9;
+  `;
+  el.textContent = ['✦','⭐','✨','🌟','💫'][Math.floor(Math.random()*5)];
+  document.body.appendChild(el);
+
+  const style = document.createElement('style');
+  style.textContent = `@keyframes fall{from{transform:translateY(0) rotate(0deg)}to{transform:translateY(110vh) rotate(720deg);opacity:0}}`;
+  document.head.appendChild(style);
+
+  setTimeout(() => el.remove(), 4000);
+}
+
+// ══════════════════════════════════════════════
+//  UTILITÁRIOS
+// ══════════════════════════════════════════════
+function showStatus(id, msg, type) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.className = `status-box ${type} visible`;
+}
+
+// ══════════════════════════════════════════════
+//  STARFIELD
+// ══════════════════════════════════════════════
+const canvas = document.getElementById('starfield');
+const ctx = canvas.getContext('2d');
+function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+const stars = Array.from({length:300}, () => ({
+  x: Math.random(), y: Math.random(),
+  r: Math.random()*1.3+0.2,
+  speed: Math.random()*0.008+0.002,
+  phase: Math.random()*Math.PI*2,
+  gold: Math.random()>0.85
+}));
+function draw() {
+  const W=canvas.width, H=canvas.height;
+  const grad=ctx.createLinearGradient(0,0,0,H);
+  grad.addColorStop(0,   '#020b1e');
+  grad.addColorStop(0.4, '#061428');
+  grad.addColorStop(0.8, '#071a34');
+  grad.addColorStop(1,   '#04101f');
+  ctx.fillStyle=grad; ctx.fillRect(0,0,W,H);
+  const t = Date.now()*0.001;
+  stars.forEach(s => {
+    const a = 0.2+0.75*Math.abs(Math.sin(t*s.speed*9+s.phase));
+    ctx.beginPath();
+    ctx.arc(s.x*W, s.y*H, s.r, 0, Math.PI*2);
+    ctx.fillStyle = s.gold ? `rgba(245,220,140,${a})` : `rgba(255,255,255,${a})`;
+    ctx.fill();
+  });
+  requestAnimationFrame(draw);
+}
+resize(); draw();
+window.addEventListener('resize', resize);
+
+// ── ENTER para verificar código ──
+document.getElementById('family-code').addEventListener('keydown', e => {
+  if (e.key === 'Enter') checkFamilyCode();
+});
+
+// Uppercase automático
+document.getElementById('family-code').addEventListener('input', function() {
+  this.value = this.value.toUpperCase();
+});
+</script>
+</body>
+</html>

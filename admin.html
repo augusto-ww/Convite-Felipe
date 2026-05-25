@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel Admin · Aniversário do Felipe 👑</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --night: #050b18;
+    --deep: #071224;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --gold-pale: #f5e4b0;
+    --cream: #fdf8ee;
+    --success: #4a9a6a;
+    --error: #e05555;
+    --pending: #5580c9;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#061428; color:var(--cream); font-family:'Cormorant Garamond',serif; min-height:100vh; }
+
+  /* LOGIN */
+  #login-screen {
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:1.5rem;
+    padding:2rem;
+  }
+  .login-box {
+    border:1px solid rgba(201,168,76,0.3);
+    padding:2.5rem;
+    max-width:360px;
+    width:100%;
+    text-align:center;
+    background:rgba(255,255,255,0.02);
+    backdrop-filter:blur(10px);
+  }
+  .login-title { font-size:1.5rem; font-weight:300; font-style:italic; color:var(--gold-light); margin-bottom:0.5rem; }
+  .login-sub { font-size:0.85rem; color:var(--gold-pale); opacity:0.6; margin-bottom:2rem; font-style:italic; }
+  .login-input {
+    width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(201,168,76,0.25);
+    padding:0.9rem; color:var(--cream); font-family:'Cormorant Garamond',serif; font-size:1rem;
+    outline:none; margin-bottom:1rem; text-align:center; letter-spacing:0.2em;
+  }
+  .login-btn {
+    width:100%; padding:0.9rem; background:transparent; border:1px solid var(--gold);
+    color:var(--gold-light); font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.35em;
+    text-transform:uppercase; cursor:pointer; transition:all 0.3s;
+  }
+  .login-btn:hover { background:rgba(201,168,76,0.1); }
+  .login-error { color:#f09090; font-size:0.85rem; font-style:italic; }
+
+  /* PAINEL */
+  #admin-panel { display:none; padding:2rem; max-width:1100px; margin:0 auto; }
+
+  /* HEADER */
+  .admin-header {
+    display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:1rem; margin-bottom:2.5rem;
+    border-bottom:1px solid rgba(201,168,76,0.15); padding-bottom:1.5rem;
+  }
+  .admin-title { font-size:1.6rem; font-weight:300; font-style:italic; }
+  .admin-title em { color:var(--gold-light); }
+  .logout-btn {
+    font-family:'Cinzel',serif; font-size:0.6rem; letter-spacing:0.3em;
+    color:rgba(201,168,76,0.5); background:none; border:none; cursor:pointer;
+    text-transform:uppercase; transition:color 0.2s;
+  }
+  .logout-btn:hover { color:var(--gold); }
+
+  /* STATS */
+  .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:1rem; margin-bottom:2.5rem; }
+  .stat-card {
+    border:1px solid rgba(201,168,76,0.15); padding:1.5rem; text-align:center;
+    background:rgba(201,168,76,0.02);
+  }
+  .stat-number { font-size:2.5rem; font-weight:300; color:var(--gold-light); line-height:1; }
+  .stat-label { font-family:'Cinzel',serif; font-size:0.55rem; letter-spacing:0.4em; color:var(--gold); text-transform:uppercase; margin-top:0.5rem; display:block; }
+
+  /* TOOLBAR */
+  .toolbar { display:flex; gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap; align-items:center; }
+  .toolbar-search {
+    flex:1; min-width:200px; background:rgba(255,255,255,0.04); border:1px solid rgba(201,168,76,0.2);
+    padding:0.7rem 1rem; color:var(--cream); font-family:'Cormorant Garamond',serif; font-size:0.95rem;
+    outline:none;
+  }
+  .toolbar-btn {
+    padding:0.7rem 1.2rem; background:transparent; border:1px solid rgba(201,168,76,0.3);
+    color:var(--gold-pale); font-family:'Cinzel',serif; font-size:0.6rem; letter-spacing:0.25em;
+    text-transform:uppercase; cursor:pointer; transition:all 0.2s;
+  }
+  .toolbar-btn:hover { border-color:var(--gold); color:var(--gold); }
+  .toolbar-btn.danger:hover { border-color:var(--error); color:#f09090; }
+
+  /* TABELA */
+  .table-wrap { overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; }
+  thead tr { border-bottom:1px solid rgba(201,168,76,0.3); }
+  th {
+    font-family:'Cinzel',serif; font-size:0.55rem; letter-spacing:0.35em;
+    color:var(--gold); text-transform:uppercase; padding:0.8rem 1rem; text-align:left;
+    font-weight:400;
+  }
+  tbody tr { border-bottom:1px solid rgba(255,255,255,0.04); transition:background 0.2s; }
+  tbody tr:hover { background:rgba(201,168,76,0.04); }
+  td { padding:0.9rem 1rem; font-size:0.95rem; vertical-align:top; }
+  .td-code { font-family:'Cinzel',serif; font-size:0.7rem; color:var(--gold); letter-spacing:0.1em; }
+  .td-family { color:var(--cream); }
+  .td-date { color:rgba(201,168,76,0.6); font-size:0.85rem; font-style:italic; }
+  .td-count { text-align:center; }
+  .badge {
+    display:inline-block; padding:0.2rem 0.6rem; font-size:0.75rem;
+    font-family:'Cinzel',serif; letter-spacing:0.1em;
+  }
+  .badge-confirmed { background:rgba(74,154,106,0.15); color:#6dd8a0; border:1px solid rgba(74,154,106,0.3); }
+
+  /* EXPANDIR MEMBROS */
+  .members-toggle {
+    background:none; border:none; color:var(--gold-pale); cursor:pointer;
+    font-family:'Cormorant Garamond',serif; font-size:0.85rem; font-style:italic;
+    text-decoration:underline; padding:0; transition:color 0.2s;
+  }
+  .members-toggle:hover { color:var(--gold-light); }
+
+  .members-detail {
+    display:none; margin-top:0.5rem;
+  }
+  .members-detail.open { display:block; }
+  .member-row {
+    display:flex; gap:1rem; align-items:center;
+    padding:0.3rem 0; border-bottom:1px solid rgba(201,168,76,0.07);
+    font-size:0.9rem;
+  }
+  .member-row:last-child { border-bottom:none; }
+  .member-name { color:var(--cream); flex:1; }
+  .member-birth { color:var(--gold); font-size:0.8rem; }
+
+  /* EMPTY */
+  .empty-state { text-align:center; padding:4rem 2rem; color:rgba(201,168,76,0.4); font-style:italic; }
+
+  /* PENDING LIST */
+  .pending-section { margin-top:2.5rem; }
+  .pending-title {
+    font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.4em;
+    color:var(--gold); text-transform:uppercase; margin-bottom:1rem; display:block;
+  }
+  .pending-grid { display:flex; flex-wrap:wrap; gap:0.5rem; }
+  .pending-chip {
+    padding:0.4rem 0.9rem; border:1px solid rgba(85,128,201,0.3);
+    background:rgba(85,128,201,0.05); color:rgba(180,200,255,0.7);
+    font-size:0.8rem; font-family:'Cinzel',serif; letter-spacing:0.1em;
+  }
+
+  /* RESET BTN */
+  .reset-section {
+    margin-top:3rem; padding-top:2rem;
+    border-top:1px solid rgba(201,168,76,0.1);
+    display:flex; gap:1rem; align-items:center; flex-wrap:wrap;
+  }
+  .reset-desc { font-size:0.9rem; font-style:italic; color:rgba(201,168,76,0.4); flex:1; }
+
+  /* EXPORT */
+  .export-btn {
+    padding:0.7rem 1.5rem; background:transparent;
+    border:1px solid rgba(74,154,106,0.4); color:#6dd8a0;
+    font-family:'Cinzel',serif; font-size:0.6rem; letter-spacing:0.25em;
+    text-transform:uppercase; cursor:pointer; transition:all 0.2s;
+  }
+  .export-btn:hover { background:rgba(74,154,106,0.1); }
+
+  @media(max-width:600px) { #admin-panel { padding:1rem; } th,td { padding:0.7rem 0.5rem; } }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <p style="font-size:2rem;margin-bottom:1rem">🔐</p>
+    <h1 class="login-title">Painel Administrativo</h1>
+    <p class="login-sub">O Pequeno Príncipe · Gerenciamento de Convidados</p>
+    <input type="password" id="admin-pass" class="login-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()">
+    <button class="login-btn" onclick="login()">Entrar</button>
+    <p class="login-error" id="login-error" style="margin-top:0.8rem;display:none"></p>
+  </div>
+</div>
+
+<!-- PAINEL -->
+<div id="admin-panel">
+
+  <div class="admin-header">
+    <div>
+      <h1 class="admin-title">Painel de <em>Confirmações</em></h1>
+      <p style="font-size:0.85rem;color:rgba(201,168,76,0.5);font-style:italic;margin-top:0.3rem">
+        1º Aniversário do Felipe · Gestão de Convidados
+      </p>
+    </div>
+    <button class="logout-btn" onclick="logout()">Sair ×</button>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-grid" id="stats-grid">
+    <div class="stat-card">
+      <div class="stat-number" id="stat-confirmed">0</div>
+      <span class="stat-label">Famílias Confirmadas</span>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="stat-pending">0</div>
+      <span class="stat-label">Famílias Pendentes</span>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="stat-total">0</div>
+      <span class="stat-label">Total de Convidados</span>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="stat-members">0</div>
+      <span class="stat-label">Total de Membros</span>
+    </div>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <input type="text" class="toolbar-search" id="search-input" placeholder="Buscar por família ou código..." oninput="renderTable()">
+    <button class="toolbar-btn export-btn" onclick="exportCSV()">⬇ Exportar CSV</button>
+    <button class="toolbar-btn" onclick="renderAll()">↻ Atualizar</button>
+  </div>
+
+  <!-- TABELA -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Família</th>
+          <th>Confirmado em</th>
+          <th style="text-align:center">Membros</th>
+          <th>Detalhes</th>
+          <th>Observações</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="rsvp-table-body">
+      </tbody>
+    </table>
+    <div class="empty-state" id="empty-state" style="display:none">
+      Nenhuma confirmação ainda. As estrelas aguardam...
+    </div>
+  </div>
+
+  <!-- PENDENTES -->
+  <div class="pending-section">
+    <span class="pending-title">Famílias que ainda não confirmaram</span>
+    <div class="pending-grid" id="pending-grid"></div>
+  </div>
+
+  <!-- RESET -->
+  <div class="reset-section">
+    <p class="reset-desc">
+      ⚠️ Área de risco: remover uma confirmação libera o código para nova confirmação.
+    </p>
+    <button class="toolbar-btn danger" onclick="clearAll()" style="border-color:rgba(224,85,85,0.3);color:#f09090">
+      Limpar TODAS as confirmações
+    </button>
+  </div>
+
+</div>
+
+<script>
+// ── CONFIG ──
+const ADMIN_PASSWORD = 'felipe2025'; // 🔑 Altere esta senha!
+
+const FAMILY_CODES = {
+  'FELIPE-FAM01': 'Família 01',
+  'FELIPE-FAM02': 'Família 02',
+  'FELIPE-FAM03': 'Família 03',
+  'FELIPE-FAM04': 'Família 04',
+  'FELIPE-FAM05': 'Família 05',
+  'FELIPE-FAM06': 'Família 06',
+  'FELIPE-FAM07': 'Família 07',
+  'FELIPE-FAM08': 'Família 08',
+  'FELIPE-FAM09': 'Família 09',
+  'FELIPE-FAM10': 'Família 10',
+  'TESTE-FELIPE': 'Família Teste',
+};
+
+// ── AUTH ──
+function login() {
+  const pass = document.getElementById('admin-pass').value;
+  if (pass === ADMIN_PASSWORD) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('admin-panel').style.display = 'block';
+    sessionStorage.setItem('admin_auth', '1');
+    renderAll();
+  } else {
+    const err = document.getElementById('login-error');
+    err.textContent = 'Senha incorreta.';
+    err.style.display = 'block';
+  }
+}
+
+function logout() {
+  sessionStorage.removeItem('admin_auth');
+  location.reload();
+}
+
+// Auto-login se sessão ativa
+if (sessionStorage.getItem('admin_auth') === '1') {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('admin-panel').style.display = 'block';
+  setTimeout(renderAll, 100);
+}
+
+// ── DADOS ──
+function getConfirmed() {
+  try { return JSON.parse(localStorage.getItem('rsvp_confirmed') || '{}'); }
+  catch { return {}; }
+}
+
+function renderAll() {
+  updateStats();
+  renderTable();
+  renderPending();
+}
+
+function updateStats() {
+  const confirmed = getConfirmed();
+  const codes = Object.keys(confirmed);
+  const totalFamilies = Object.keys(FAMILY_CODES).length;
+  const totalMembers = codes.reduce((sum, c) => sum + (confirmed[c].members?.length || 0), 0);
+
+  document.getElementById('stat-confirmed').textContent = codes.length;
+  document.getElementById('stat-pending').textContent = totalFamilies - codes.length;
+  document.getElementById('stat-total').textContent = totalFamilies;
+  document.getElementById('stat-members').textContent = totalMembers;
+}
+
+function renderTable() {
+  const confirmed = getConfirmed();
+  const search = document.getElementById('search-input').value.toLowerCase();
+  const tbody = document.getElementById('rsvp-table-body');
+  const emptyState = document.getElementById('empty-state');
+
+  const entries = Object.entries(confirmed).filter(([code, data]) => {
+    if (!search) return true;
+    return code.toLowerCase().includes(search) ||
+           (data.familyName || '').toLowerCase().includes(search);
+  });
+
+  tbody.innerHTML = '';
+
+  if (entries.length === 0) {
+    emptyState.style.display = 'block';
+    return;
+  }
+  emptyState.style.display = 'none';
+
+  entries.sort((a, b) => new Date(b[1].confirmedAt) - new Date(a[1].confirmedAt));
+
+  entries.forEach(([code, data]) => {
+    const date = new Date(data.confirmedAt);
+    const dateStr = date.toLocaleDateString('pt-BR', {
+      day:'2-digit', month:'2-digit', year:'numeric',
+      hour:'2-digit', minute:'2-digit'
+    });
+
+    const membersHtml = (data.members || []).map(m => `
+      <div class="member-row">
+        <span class="member-name">${m.nome}</span>
+        <span class="member-birth">${m.nascimento || '—'}</span>
+      </div>
+    `).join('');
+
+    const rowId = `members-${code.replace(/[^a-z0-9]/gi,'_')}`;
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="td-code">${code}</td>
+      <td class="td-family">${data.familyName || '—'}</td>
+      <td class="td-date">${dateStr}</td>
+      <td class="td-count"><span class="badge badge-confirmed">${data.members?.length || 0}</span></td>
+      <td>
+        <button class="members-toggle" onclick="toggleMembers('${rowId}')">
+          Ver membros
+        </button>
+        <div class="members-detail" id="${rowId}">${membersHtml}</div>
+      </td>
+      <td style="font-size:0.9rem;color:rgba(201,168,76,0.6);font-style:italic">
+        ${data.obs || '—'}
+      </td>
+      <td>
+        <button class="toolbar-btn danger" onclick="removeEntry('${code}')"
+          style="border-color:rgba(224,85,85,0.2);color:rgba(224,85,85,0.5);padding:0.3rem 0.7rem;font-size:0.55rem">
+          Remover
+        </button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function toggleMembers(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+}
+
+function renderPending() {
+  const confirmed = getConfirmed();
+  const grid = document.getElementById('pending-grid');
+  const pending = Object.entries(FAMILY_CODES).filter(([code]) => !confirmed[code]);
+  grid.innerHTML = pending.map(([code, name]) =>
+    `<div class="pending-chip">${name}</div>`
+  ).join('') || '<p style="color:rgba(201,168,76,0.4);font-style:italic;font-size:0.9rem">Todas as famílias confirmaram! 🎉</p>';
+}
+
+function removeEntry(code) {
+  if (!confirm(`Remover confirmação de ${FAMILY_CODES[code] || code}? O código poderá ser usado novamente.`)) return;
+  const confirmed = getConfirmed();
+  delete confirmed[code];
+  localStorage.setItem('rsvp_confirmed', JSON.stringify(confirmed));
+  renderAll();
+}
+
+function clearAll() {
+  if (!confirm('⚠️ Remover TODAS as confirmações? Esta ação não pode ser desfeita.')) return;
+  if (!confirm('Tem certeza absoluta? Todos os dados serão perdidos.')) return;
+  localStorage.removeItem('rsvp_confirmed');
+  renderAll();
+}
+
+function exportCSV() {
+  const confirmed = getConfirmed();
+  const rows = [['Código', 'Família', 'Confirmado em', 'Nº Membros', 'Nomes', 'Datas de Nascimento', 'Observações']];
+
+  Object.entries(confirmed).forEach(([code, data]) => {
+    const date = new Date(data.confirmedAt).toLocaleString('pt-BR');
+    const nomes = (data.members || []).map(m => m.nome).join(' | ');
+    const nascimentos = (data.members || []).map(m => m.nascimento || '').join(' | ');
+    rows.push([code, data.familyName || '', date, data.members?.length || 0, nomes, nascimentos, data.obs || '']);
+  });
+
+  const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `rsvp_pequeno_principe_${new Date().toISOString().split('T')[0]}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+document.getElementById('admin-pass').addEventListener('keydown', e => {
+  if (e.key === 'Enter') login();
+});
+</script>
+</body>
+</html>
