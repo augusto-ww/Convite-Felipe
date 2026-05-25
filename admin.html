@@ -98,13 +98,12 @@
   .editor-section h3 { font-family:'Cinzel',serif; font-size:0.75rem; letter-spacing:0.2em; color:var(--gold-light); margin-bottom:1.2rem; text-transform:uppercase; border-bottom:1px solid rgba(201,168,76,0.1); padding-bottom:0.4rem; }
   .form-group { display:flex; flex-direction:column; gap:0.5rem; margin-bottom:1rem; }
   .form-group label { font-family:'Cinzel',serif; font-size:0.6rem; letter-spacing:0.2em; color:var(--gold); text-transform:uppercase; }
-  .form-input, .form-textarea {
+  .form-input {
     width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(201,168,76,0.2);
     padding:0.8rem; color:var(--cream); font-family:'Cormorant Garamond',serif; font-size:1.05rem;
     outline:none; transition:border 0.3s;
   }
-  .form-input:focus, .form-textarea:focus { border-color:var(--gold); }
-  .form-textarea { resize:vertical; min-height:90px; }
+  .form-input:focus { border-color:var(--gold); }
 
   /* TOOLBAR */
   .toolbar { display:flex; gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap; align-items:center; }
@@ -244,7 +243,6 @@
 
   <div style="display:flex;gap:1rem;margin-bottom:2rem;border-bottom:1px solid rgba(201,168,76,.1);">
     <button class="tab-btn active" onclick="showTab('confirmacoes')" id="tab-conf">Confirmações</button>
-    <button class="tab-btn" onclick="showTab('textos')" id="tab-txt">Editar Textos do Convite</button>
     <button class="tab-btn" onclick="showTab('cadastro')" id="tab-reg">Cadastrar Famílias</button>
   </div>
 
@@ -290,39 +288,6 @@
     </div>
   </div>
 
-  <div id="aba-textos" style="display:none;">
-    <div class="editor-grid">
-      <div class="editor-section">
-        <h3>Cena 4 — Informações da Festa</h3>
-        <div class="form-group">
-          <label>Data por Extenso</label>
-          <input type="text" id="txt-event-date" class="form-input">
-        </div>
-        <div class="form-group">
-          <label>Horário</label>
-          <input type="text" id="txt-event-time" class="form-input">
-        </div>
-        <div class="form-group">
-          <label>Endereço / Localização</label>
-          <textarea id="txt-event-location" class="form-textarea"></textarea>
-        </div>
-        <div class="form-group">
-          <label>Link do Google Maps</label>
-          <input type="text" id="txt-event-maps" class="form-input">
-        </div>
-        <div class="form-group">
-          <label>Prazo Limite de Confirmação</label>
-          <input type="text" id="txt-event-deadline" class="form-input">
-        </div>
-      </div>
-    </div>
-    <div style="text-align:right; margin-top:1.5rem;">
-      <button class="toolbar-btn" style="border-color:var(--gold); color:var(--gold-light); padding:0.9rem 2.5rem;" onclick="saveTexts()">
-        ✨ Salvar Todos os Textos
-      </button>
-    </div>
-  </div>
-
   <div id="aba-cadastro" style="display:none;">
     <div class="editor-grid" style="grid-template-columns: 1fr;">
       <div class="editor-section">
@@ -333,13 +298,13 @@
             <input type="text" id="reg-family-name" class="form-input" placeholder="Ex: Família Silva">
           </div>
           <div class="form-group">
-            <label>Código Personalizado (Compartilhável)</label>
+            <label>Código Personalizado</label>
             <input type="text" id="reg-family-code" class="form-input" placeholder="Ex: SILVA-👑" style="text-transform: uppercase;">
           </div>
         </div>
         
         <div class="form-group" style="margin-top: 1rem;">
-          <label>Integrantes Esperados (Opcional - preenche o convite do convidado)</label>
+          <label>Integrantes da Família</label>
           <div id="reg-members-inputs" style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 0.5rem;"></div>
           <button class="toolbar-btn" type="button" style="font-size: 0.65rem; padding: 0.4rem 1rem; align-self: flex-start;" onclick="addRegMemberInput()">+ Adicionar Integrante</button>
         </div>
@@ -360,7 +325,7 @@
             <tr>
               <th>Código</th>
               <th>Família</th>
-              <th>Integrantes Pré-configurados</th>
+              <th>Integrantes Configurados</th>
               <th>Ações</th>
             </tr>
           </thead>
@@ -372,33 +337,12 @@
 
 </div>
 
-<script>
-// ── CONFIG ──
+<script type="module">
+import { db } from './firebase.js';
+import { doc, setDoc, getDocs, deleteDoc, collection } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
 const ADMIN_PASSWORD = 'felipe2025';
 
-// Carregador Dinâmico dos códigos salvos
-function getFamilyCodes() {
-  try {
-    const saved = localStorage.getItem('rsvp_family_codes');
-    if (saved) return JSON.parse(saved);
-  } catch(e) {}
-  
-  // Lista padrão caso o localStorage esteja vazio inicialmente
-  return {
-    'FELIPE-FAM01': { name: 'Família 01', members: [] },
-    'FELIPE-FAM02': { name: 'Família 02', members: [] },
-    'FELIPE-FAM03': { name: 'Família 03', members: [] },
-    'TESTE-FELIPE': { name: 'Família Teste', members: ['Convidado Exemplo 1', 'Convidado Exemplo 2'] },
-  };
-}
-
-function getFamilyName(code) {
-  const codes = getFamilyCodes();
-  if (!codes[code]) return code;
-  return typeof codes[code] === 'object' ? codes[code].name : codes[code];
-}
-
-// ── AUTH ──
 function login() {
   const pass = document.getElementById('admin-pass').value;
   if (pass === ADMIN_PASSWORD) {
@@ -406,7 +350,6 @@ function login() {
     document.getElementById('admin-panel').style.display = 'block';
     sessionStorage.setItem('admin_auth', '1');
     renderAll();
-    loadTexts();
   } else {
     const err = document.getElementById('login-error');
     err.textContent = 'Senha incorreta.';
@@ -422,34 +365,24 @@ function logout() {
 if (sessionStorage.getItem('admin_auth') === '1') {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('admin-panel').style.display = 'block';
-  setTimeout(() => {
-    renderAll();
-    loadTexts();
-  }, 100);
+  setTimeout(renderAll, 100);
 }
 
-// ── SISTEMA DE ABAS ──
 function showTab(tabName) {
   const tabConf = document.getElementById('tab-conf');
-  const tabTxt = document.getElementById('tab-txt');
   const tabReg = document.getElementById('tab-reg');
   const abaConf = document.getElementById('aba-confirmacoes');
-  const abaTxt = document.getElementById('aba-textos');
   const abaReg = document.getElementById('aba-cadastro');
 
   tabConf.classList.remove('active');
-  tabTxt.classList.remove('active');
   tabReg.classList.remove('active');
   abaConf.style.display = 'none';
-  abaTxt.style.display = 'none';
   abaReg.style.display = 'none';
 
   if (tabName === 'confirmacoes') {
     tabConf.classList.add('active');
     abaConf.style.display = 'block';
-  } else if (tabName === 'textos') {
-    tabTxt.classList.add('active');
-    abaTxt.style.display = 'block';
+    renderAll();
   } else if (tabName === 'cadastro') {
     tabReg.classList.add('active');
     abaReg.style.display = 'block';
@@ -457,155 +390,97 @@ function showTab(tabName) {
   }
 }
 
-// ── DINÂMICA DE CRIAÇÃO DE INTEGRANTES (ADMIN) ──
 function addRegMemberInput(value = '') {
   const container = document.getElementById('reg-members-inputs');
   const div = document.createElement('div');
   div.style.cssText = 'display: flex; gap: 0.5rem;';
   div.innerHTML = `
-    <input type="text" class="form-input reg-member-name" placeholder="Nome completo do integrante" value="${value}" style="flex: 1;">
+    <input type="text" class="form-input reg-member-name" placeholder="Nome completo" value="${value}" style="flex: 1;">
     <button class="toolbar-btn danger" style="padding:0 0.8rem; border-color:rgba(224,85,85,0.3); color:#f09090;" onclick="this.parentElement.remove()">×</button>
   `;
   container.appendChild(div);
 }
 
-function registerFamily() {
+async function registerFamily() {
   const name = document.getElementById('reg-family-name').value.trim();
   const code = document.getElementById('reg-family-code').value.trim().toUpperCase();
   
   if (!name || !code) {
-    alert('Por favor, defina o Nome da Família e o Código!');
+    alert('Informe nome e código');
     return;
   }
 
-  const memberInputs = document.querySelectorAll('.reg-member-name');
   const members = [];
-  memberInputs.forEach(input => {
+  document.querySelectorAll('.reg-member-name').forEach(input => {
     if (input.value.trim()) members.push(input.value.trim());
   });
 
-  const codes = getFamilyCodes();
-  codes[code] = { name: name, members: members };
-
-  localStorage.setItem('rsvp_family_codes', JSON.stringify(codes));
+  await setDoc(doc(db, 'familias', code), { name, members });
+  alert('Família cadastrada com sucesso!');
   
   document.getElementById('reg-family-name').value = '';
   document.getElementById('reg-family-code').value = '';
   document.getElementById('reg-members-inputs').innerHTML = '';
-  
-  alert(`Família registrada com sucesso!\nCódigo: ${code}`);
-  renderAll();
   renderRegisteredCodesTable();
 }
 
-function renderRegisteredCodesTable() {
-  const codes = getFamilyCodes();
+async function renderRegisteredCodesTable() {
   const tbody = document.getElementById('registered-codes-table-body');
   tbody.innerHTML = '';
 
-  Object.entries(codes).forEach(([code, data]) => {
-    const famName = typeof data === 'object' ? data.name : data;
-    const famMembers = typeof data === 'object' && data.members ? data.members.join(', ') : '—';
-
+  const snap = await getDocs(collection(db, 'familias'));
+  snap.forEach(docSnap => {
+    const data = docSnap.data();
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td class="td-code">${code}</td>
-      <td class="td-family">${famName}</td>
-      <td style="color: rgba(255,255,255,0.5); font-size: 0.9rem; font-style:italic;">${famMembers}</td>
+      <td class="td-code">${docSnap.id}</td>
+      <td class="td-family">${data.name}</td>
+      <td style="color: rgba(255,255,255,0.5); font-style:italic;">${(data.members || []).join(', ')}</td>
       <td>
-        <button class="toolbar-btn danger" onclick="deleteRegisteredFamily('${code}')" style="border-color:rgba(224,85,85,0.2);color:rgba(224,85,85,0.5);padding:0.3rem 0.7rem;font-size:0.55rem">
-          Excluir Código
-        </button>
+        <button class="toolbar-btn danger" style="padding:0.3rem 0.7rem;font-size:0.55rem">Excluir</button>
       </td>
     `;
+    tr.querySelector('button').onclick = () => deleteRegisteredFamily(docSnap.id);
     tbody.appendChild(tr);
   });
 }
 
-function deleteRegisteredFamily(code) {
+async function deleteRegisteredFamily(code) {
   if (!confirm(`Excluir permanentemente o código "${code}"?`)) return;
-  const codes = getFamilyCodes();
-  delete codes[code];
-  localStorage.setItem('rsvp_family_codes', JSON.stringify(codes));
-  renderAll();
+  await deleteDoc(doc(db, 'familias', code));
   renderRegisteredCodesTable();
 }
 
-// ── MANIPULAÇÃO DOS TEXTOS DA FESTA ──
-function saveTexts() {
-  const settings = JSON.parse(localStorage.getItem('felipe_party_details') || '{}');
-  settings.eventDate = document.getElementById('txt-event-date').value;
-  settings.eventTime = document.getElementById('txt-event-time').value;
-  settings.eventLocation = document.getElementById('txt-event-location').value;
-  settings.eventMaps = document.getElementById('txt-event-maps').value;
-  settings.eventDeadline = document.getElementById('txt-event-deadline').value;
-
-  localStorage.setItem('felipe_party_details', JSON.stringify(settings));
-  alert('✨ Textos salvos com sucesso!');
-}
-
-function loadTexts() {
-  const data = localStorage.getItem('felipe_party_details');
-  const d = data ? JSON.parse(data) : {
-    eventDate: '18 de Julho de 2026',
-    eventTime: 'Das 13h30 às 17h30',
-    eventLocation: 'Rua Paraná, 225  ·  Vila Irene São Roque – SP',
-    eventMaps: 'https://maps.google.com/?q=Rua+Paraná+225+Vila+Irene+São+Roque+SP',
-    eventDeadline: '10 de Junho de 2026'
-  };
-  document.getElementById('txt-event-date').value = d.eventDate || '';
-  document.getElementById('txt-event-time').value = d.eventTime || '';
-  document.getElementById('txt-event-location').value = d.eventLocation || '';
-  document.getElementById('txt-event-maps').value = d.eventMaps || '';
-  document.getElementById('txt-event-deadline').value = d.eventDeadline || '';
-}
-
-// ── DADOS DO RSVP ──
-function getConfirmed() {
-  try { return JSON.parse(localStorage.getItem('rsvp_confirmed') || '{}'); }
-  catch { return {}; }
-}
-
-function renderAll() {
-  updateStats();
-  renderTable();
-  renderPending();
-}
-
-function updateStats() {
-  const confirmed = getConfirmed();
-  const codes = Object.keys(confirmed);
-  const totalFamilies = Object.keys(getFamilyCodes()).length;
-  const totalMembers = codes.reduce((sum, c) => sum + (confirmed[c].members?.length || 0), 0);
-
-  document.getElementById('stat-confirmed').textContent = codes.length;
-  document.getElementById('stat-pending').textContent = totalFamilies - codes.length;
-  document.getElementById('stat-total').textContent = totalFamilies;
-  document.getElementById('stat-members').textContent = totalMembers;
-}
-
-function renderTable() {
-  const confirmed = getConfirmed();
-  const search = document.getElementById('search-input').value.toLowerCase();
+async function renderTable() {
   const tbody = document.getElementById('rsvp-table-body');
   const emptyState = document.getElementById('empty-state');
-
-  const entries = Object.entries(confirmed).filter(([code, data]) => {
-    if (!search) return true;
-    return code.toLowerCase().includes(search) || (data.familyName || '').toLowerCase().includes(search);
-  });
-
   tbody.innerHTML = '';
+
+  const search = document.getElementById('search-input').value.toLowerCase();
+  const snap = await getDocs(collection(db, 'confirmacoes'));
+  
+  let totalMembros = 0;
+  let entries = [];
+
+  snap.forEach(d => {
+    const data = d.data();
+    if (!search || d.id.toLowerCase().includes(search) || (data.familyName || '').toLowerCase().includes(search)) {
+      entries.push({ id: d.id, ...data });
+    }
+  });
 
   if (entries.length === 0) {
     emptyState.style.display = 'block';
+    document.getElementById('stat-confirmed').textContent = '0';
+    document.getElementById('stat-members').textContent = '0';
     return;
   }
   emptyState.style.display = 'none';
 
-  entries.sort((a, b) => new Date(b[1].confirmedAt) - new Date(a[1].confirmedAt));
+  entries.sort((a, b) => new Date(b.confirmedAt) - new Date(a.confirmedAt));
 
-  entries.forEach(([code, data]) => {
+  entries.forEach(data => {
+    totalMembros += (data.members?.length || 0);
     const date = new Date(data.confirmedAt);
     const dateStr = date.toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
 
@@ -616,66 +491,88 @@ function renderTable() {
       </div>
     `).join('');
 
-    const rowId = `members-${code.replace(/[^a-z0-9]/gi,'_')}`;
-
+    const rowId = `members-${data.id}`;
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td class="td-code">${code}</td>
+      <td class="td-code">${data.id}</td>
       <td class="td-family">${data.familyName || '—'}</td>
       <td class="td-date">${dateStr}</td>
       <td class="td-count"><span class="badge badge-confirmed">${data.members?.length || 0}</span></td>
       <td>
-        <button class="members-toggle" onclick="toggleMembers('${rowId}')">Ver membros</button>
+        <button class="members-toggle">Ver membros</button>
         <div class="members-detail" id="${rowId}">${membersHtml}</div>
       </td>
       <td style="font-size:0.9rem;color:rgba(201,168,76,0.6);font-style:italic">${data.obs || '—'}</td>
-      <td>
-        <button class="toolbar-btn danger" onclick="removeEntry('${code}')" style="border-color:rgba(224,85,85,0.2);color:rgba(224,85,85,0.5);padding:0.3rem 0.7rem;font-size:0.55rem">Remover</button>
-      </td>
+      <td><button class="toolbar-btn danger" style="border-color:rgba(224,85,85,0.2);color:rgba(224,85,85,0.5);padding:0.3rem 0.7rem;font-size:0.55rem">Remover</button></td>
     `;
+    
+    tr.querySelector('.members-toggle').onclick = () => toggleMembers(rowId);
+    tr.querySelector('.danger').onclick = () => removeEntry(data.id, data.familyName);
     tbody.appendChild(tr);
   });
+
+  document.getElementById('stat-confirmed').textContent = entries.length;
+  document.getElementById('stat-members').textContent = totalMembros;
 }
 
 function toggleMembers(id) {
   document.getElementById(id).classList.toggle('open');
 }
 
-function renderPending() {
-  const confirmed = getConfirmed();
+async function renderPending() {
   const grid = document.getElementById('pending-grid');
-  const pending = Object.entries(getFamilyCodes()).filter(([code]) => !confirmed[code]);
+  const confSnap = await getDocs(collection(db, 'confirmacoes'));
+  const famSnap = await getDocs(collection(db, 'familias'));
   
-  grid.innerHTML = pending.map(([code, data]) => {
-    const name = typeof data === 'object' ? data.name : data;
-    return `<div class="pending-chip">${name}</div>`;
-  }).join('') || '<p style="color:rgba(201,168,76,0.4);font-style:italic;font-size:0.9rem">Todas as famílias confirmaram! 🎉</p>';
+  let confirmados = [];
+  confSnap.forEach(d => confirmados.push(d.id));
+
+  let pendingHtml = '';
+  let totalFamilias = 0;
+  
+  famSnap.forEach(d => {
+    totalFamilias++;
+    if (!confirmados.includes(d.id)) {
+      pendingHtml += `<div class="pending-chip">${d.data().name}</div>`;
+    }
+  });
+
+  grid.innerHTML = pendingHtml || '<p style="color:rgba(201,168,76,0.4);font-style:italic;font-size:0.9rem">Todas as famílias confirmaram! 🎉</p>';
+  document.getElementById('stat-total').textContent = totalFamilias;
+  document.getElementById('stat-pending').textContent = totalFamilias - confirmados.length;
 }
 
-function removeEntry(code) {
-  if (!confirm(`Remover confirmação de ${getFamilyName(code)}? O código poderá ser usado novamente.`)) return;
-  const confirmed = getConfirmed();
-  delete confirmed[code];
-  localStorage.setItem('rsvp_confirmed', JSON.stringify(confirmed));
+function renderAll() {
+  renderTable();
+  renderPending();
+}
+
+async function removeEntry(code, name) {
+  if (!confirm(`Remover confirmação de ${name || code}? O código poderá ser usado novamente.`)) return;
+  await deleteDoc(doc(db, 'confirmacoes', code));
   renderAll();
 }
 
-function clearAll() {
+async function clearAll() {
   if (!confirm('⚠️ Remover TODAS as confirmações? Esta ação não pode ser desfeita.')) return;
-  if (!confirm('Tem certeza absoluta? Todos os dados serão perdidos.')) return;
-  localStorage.removeItem('rsvp_confirmed');
+  if (!confirm('Tem certeza absoluta? Todos os dados armazenados serão deletados.')) return;
+  const snap = await getDocs(collection(db, 'confirmacoes'));
+  for (const docSnap of snap.docs) {
+    await deleteDoc(doc(db, 'confirmacoes', docSnap.id));
+  }
   renderAll();
 }
 
-function exportCSV() {
-  const confirmed = getConfirmed();
+async function exportCSV() {
   const rows = [['Código', 'Família', 'Confirmado em', 'Nº Membros', 'Nomes', 'Datas de Nascimento', 'Observações']];
-
-  Object.entries(confirmed).forEach(([code, data]) => {
+  const snap = await getDocs(collection(db, 'confirmacoes'));
+  
+  snap.forEach(d => {
+    const data = d.data();
     const date = new Date(data.confirmedAt).toLocaleString('pt-BR');
     const nomes = (data.members || []).map(m => m.nome).join(' | ');
     const nascimentos = (data.members || []).map(m => m.nascimento || '').join(' | ');
-    rows.push([code, data.familyName || '', date, data.members?.length || 0, nomes, nascimentos, data.obs || '']);
+    rows.push([d.id, data.familyName || '', date, data.members?.length || 0, nomes, nascimentos, data.obs || '']);
   });
 
   const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
@@ -686,9 +583,17 @@ function exportCSV() {
   a.click(); URL.revokeObjectURL(url);
 }
 
-document.getElementById('admin-pass').addEventListener('keydown', e => {
-  if (e.key === 'Enter') login();
-});
+// Vincular escopo aos botões nativos HTML
+window.login = login;
+window.logout = logout;
+window.showTab = showTab;
+window.addRegMemberInput = addRegMemberInput;
+window.registerFamily = registerFamily;
+window.deleteRegisteredFamily = deleteRegisteredFamily;
+window.renderTable = renderTable;
+window.renderAll = renderAll;
+window.clearAll = clearAll;
+window.exportCSV = exportCSV;
 </script>
 </body>
 </html>
