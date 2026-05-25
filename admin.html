@@ -83,28 +83,28 @@
   .stat-label { font-family:'Cinzel',serif; font-size:0.55rem; letter-spacing:0.4em; color:var(--gold); text-transform:uppercase; margin-top:0.5rem; display:block; }
 
   /* ABAS */
-  .tab-container { display:flex; gap:1rem; margin-bottom:2rem; border-bottom:1px solid rgba(201,168,76,.1); }
   .tab-btn {
-    background:none; border:none; padding:0.8rem 1.5rem; color:rgba(201,168,76,0.4);
+    background:none; border:none; padding:0.7rem 1.2rem; color:rgba(201,168,76,0.4);
     font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.2em; cursor:pointer;
     text-transform:uppercase; transition:all 0.3s; border-bottom:2px solid transparent;
+    margin-bottom:-1px;
   }
   .tab-btn:hover { color:var(--gold-light); }
   .tab-btn.active { color:var(--gold-light); border-bottom:2px solid var(--gold); }
 
-  /* EDITOR DE TEXTOS FORM */
+  /* FORMULÁRIO DE TEXTOS E CADASTROS */
   .editor-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:1.5rem; }
-  .editor-section { border:1px solid rgba(201,168,76,0.15); padding:1.5rem; background:rgba(255,255,255,0.01); }
+  .editor-section { border:1px solid rgba(201,168,76,0.15); padding:1.5rem; background:rgba(255,255,255,0.01); margin-bottom:1.5rem;}
   .editor-section h3 { font-family:'Cinzel',serif; font-size:0.75rem; letter-spacing:0.2em; color:var(--gold-light); margin-bottom:1.2rem; text-transform:uppercase; border-bottom:1px solid rgba(201,168,76,0.1); padding-bottom:0.4rem; }
-  .form-group { display:flex; flex-direction:column; gap:0.4rem; margin-bottom:1rem; }
-  .form-group label { font-family:'Cinzel',serif; font-size:0.55rem; letter-spacing:0.15em; color:var(--gold); text-transform:uppercase; }
+  .form-group { display:flex; flex-direction:column; gap:0.5rem; margin-bottom:1rem; }
+  .form-group label { font-family:'Cinzel',serif; font-size:0.6rem; letter-spacing:0.2em; color:var(--gold); text-transform:uppercase; }
   .form-input, .form-textarea {
     width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(201,168,76,0.2);
-    padding:0.7rem 0.9rem; color:var(--cream); font-family:'Cormorant Garamond',serif; font-size:1rem; outline:none;
+    padding:0.8rem; color:var(--cream); font-family:'Cormorant Garamond',serif; font-size:1.05rem;
+    outline:none; transition:border 0.3s;
   }
-  .form-input:focus, .form-textarea:focus { border-color:var(--gold-light); }
-  .form-textarea { resize:vertical; min-height:80px; }
-  .save-bar { margin-top:2rem; padding-top:1.5rem; border-top:1px solid rgba(201,168,76,0.1); text-align:right; }
+  .form-input:focus, .form-textarea:focus { border-color:var(--gold); }
+  .form-textarea { resize:vertical; min-height:90px; }
 
   /* TOOLBAR */
   .toolbar { display:flex; gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap; align-items:center; }
@@ -234,7 +234,7 @@
     </div>
     <div class="stat-card">
       <div class="stat-number" id="stat-total">0</div>
-      <span class="stat-label">Total de Convidados</span>
+      <span class="stat-label">Total de Códigos</span>
     </div>
     <div class="stat-card">
       <div class="stat-number" id="stat-members">0</div>
@@ -242,12 +242,13 @@
     </div>
   </div>
 
-  <div class="tab-container">
-    <button class="tab-btn active" id="tab-btn-rsvp" onclick="switchTab('rsvp')">Confirmações</button>
-    <button class="tab-btn" id="tab-btn-texts" onclick="switchTab('texts')">Editar Textos do Convite</button>
+  <div style="display:flex;gap:1rem;margin-bottom:2rem;border-bottom:1px solid rgba(201,168,76,.1);">
+    <button class="tab-btn active" onclick="showTab('confirmacoes')" id="tab-conf">Confirmações</button>
+    <button class="tab-btn" onclick="showTab('textos')" id="tab-txt">Editar Textos do Convite</button>
+    <button class="tab-btn" onclick="showTab('cadastro')" id="tab-reg">Cadastrar Famílias</button>
   </div>
 
-  <div id="tab-content-rsvp">
+  <div id="aba-confirmacoes">
     <div class="toolbar">
       <input type="text" class="toolbar-search" id="search-input" placeholder="Buscar por família ou código..." oninput="renderTable()">
       <button class="toolbar-btn export-btn" onclick="exportCSV()">⬇ Exportar CSV</button>
@@ -267,8 +268,7 @@
             <th></th>
           </tr>
         </thead>
-        <tbody id="rsvp-table-body">
-        </tbody>
+        <tbody id="rsvp-table-body"></tbody>
       </table>
       <div class="empty-state" id="empty-state" style="display:none">
         Nenhuma confirmação ainda. As estrelas aguardam...
@@ -290,53 +290,8 @@
     </div>
   </div>
 
-  <div id="tab-content-texts" style="display: none;">
+  <div id="aba-textos" style="display:none;">
     <div class="editor-grid">
-      
-      <div class="editor-section">
-        <h3>Cena 1 — Abertura</h3>
-        <div class="form-group">
-          <label>Narrativa Linha 1</label>
-          <input type="text" id="txt-narr1" class="form-input">
-        </div>
-        <div class="form-group">
-          <label>Narrativa Linha 2</label>
-          <input type="text" id="txt-narr2" class="form-input">
-        </div>
-        <div class="form-group">
-          <label>Subtítulo do Convite</label>
-          <input type="text" id="txt-invite-sub" class="form-input">
-        </div>
-        <div class="form-group">
-          <label>Nome do Aniversariante</label>
-          <input type="text" id="txt-name" class="form-input">
-        </div>
-        <div class="form-group">
-          <label>Texto da Faixa / Idade</label>
-          <input type="text" id="txt-aninho" class="form-input">
-        </div>
-      </div>
-
-      <div class="editor-section">
-        <h3>Cena 2 e 3 — Elementos Temáticos</h3>
-        <div class="form-group">
-          <label>Subtítulo do Planeta (Cena 2)</label>
-          <input type="text" id="txt-planet-sub" class="form-input">
-        </div>
-        <div class="form-group">
-          <label>Legenda do Planeta (Cena 2)</label>
-          <input type="text" id="txt-planet-label" class="form-input">
-        </div>
-        <div class="form-group">
-          <label>Citação / Frase (Cena 3)</label>
-          <textarea id="txt-quote-body" class="form-textarea"></textarea>
-        </div>
-        <div class="form-group">
-          <label>Autor da Citação (Cena 3)</label>
-          <input type="text" id="txt-quote-author" class="form-input">
-        </div>
-      </div>
-
       <div class="editor-section">
         <h3>Cena 4 — Informações da Festa</h3>
         <div class="form-group">
@@ -352,61 +307,66 @@
           <textarea id="txt-event-location" class="form-textarea"></textarea>
         </div>
         <div class="form-group">
-          <label>Link do Google Maps (URL do Botão)</label>
+          <label>Link do Google Maps</label>
           <input type="text" id="txt-event-maps" class="form-input">
-        </div>
-        <div class="form-group">
-          <label>Tipo de Traje</label>
-          <input type="text" id="txt-event-traje" class="form-input">
         </div>
         <div class="form-group">
           <label>Prazo Limite de Confirmação</label>
           <input type="text" id="txt-event-deadline" class="form-input">
         </div>
       </div>
-
-      <div class="editor-section">
-        <h3>Cenas 5 e 6 — Mensagem final & RSVP</h3>
-        <div class="form-group">
-          <label>Título da Mensagem (Cena 5)</label>
-          <textarea id="txt-msg-title" class="form-textarea"></textarea>
-        </div>
-        <div class="form-group">
-          <label>Parágrafo 1 da Mensagem</label>
-          <textarea id="txt-msg-p1" class="form-textarea"></textarea>
-        </div>
-        <div class="form-group">
-          <label>Parágrafo 2 da Mensagem</label>
-          <textarea id="txt-msg-p2" class="form-textarea"></textarea>
-        </div>
-        <div class="form-group">
-          <label>Assinatura de Fechamento</label>
-          <input type="text" id="txt-msg-sign" class="form-input">
-        </div>
-        <div class="form-group">
-          <label>Título do Bloco RSVP (Cena 6)</label>
-          <input type="text" id="txt-rsvp-title" class="form-input">
-        </div>
-        <div class="form-group">
-          <label>Texto descritivo do RSVP</label>
-          <textarea id="txt-rsvp-sub" class="form-textarea"></textarea>
-        </div>
-        <div class="form-group">
-          <label>Link da API do WhatsApp (wa.me)</label>
-          <input type="text" id="txt-rsvp-wpp-link" class="form-input">
-        </div>
-        <div class="form-group">
-          <label>Telefone para exibição física</label>
-          <input type="text" id="txt-rsvp-tel-label" class="form-input">
-        </div>
-      </div>
-
     </div>
-
-    <div class="save-bar">
-      <button class="toolbar-btn" style="border-color: var(--gold); color: var(--gold-light); padding: 0.9rem 2.5rem;" onclick="saveTexts()">
+    <div style="text-align:right; margin-top:1.5rem;">
+      <button class="toolbar-btn" style="border-color:var(--gold); color:var(--gold-light); padding:0.9rem 2.5rem;" onclick="saveTexts()">
         ✨ Salvar Todos os Textos
       </button>
+    </div>
+  </div>
+
+  <div id="aba-cadastro" style="display:none;">
+    <div class="editor-grid" style="grid-template-columns: 1fr;">
+      <div class="editor-section">
+        <h3>Cadastrar Nova Família & Definir Código</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label>Nome da Família</label>
+            <input type="text" id="reg-family-name" class="form-input" placeholder="Ex: Família Silva">
+          </div>
+          <div class="form-group">
+            <label>Código Personalizado (Compartilhável)</label>
+            <input type="text" id="reg-family-code" class="form-input" placeholder="Ex: SILVA-👑" style="text-transform: uppercase;">
+          </div>
+        </div>
+        
+        <div class="form-group" style="margin-top: 1rem;">
+          <label>Integrantes Esperados (Opcional - preenche o convite do convidado)</label>
+          <div id="reg-members-inputs" style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 0.5rem;"></div>
+          <button class="toolbar-btn" type="button" style="font-size: 0.65rem; padding: 0.4rem 1rem; align-self: flex-start;" onclick="addRegMemberInput()">+ Adicionar Integrante</button>
+        </div>
+
+        <div style="text-align: right; margin-top: 1.5rem;">
+          <button class="toolbar-btn" style="border-color: var(--gold); color: var(--gold-light);" onclick="registerFamily()">
+            💾 Salvar e Gerar Código
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="editor-section" style="margin-top: 2rem;">
+      <h3>Lista de Códigos Gerados</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Família</th>
+              <th>Integrantes Pré-configurados</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="registered-codes-table-body"></tbody>
+        </table>
+      </div>
     </div>
   </div>
 
@@ -416,19 +376,27 @@
 // ── CONFIG ──
 const ADMIN_PASSWORD = 'felipe2025';
 
-const FAMILY_CODES = {
-  'FELIPE-FAM01': 'Família 01',
-  'FELIPE-FAM02': 'Família 02',
-  'FELIPE-FAM03': 'Família 03',
-  'FELIPE-FAM04': 'Família 04',
-  'FELIPE-FAM05': 'Família 05',
-  'FELIPE-FAM06': 'Família 06',
-  'FELIPE-FAM07': 'Família 07',
-  'FELIPE-FAM08': 'Família 08',
-  'FELIPE-FAM09': 'Família 09',
-  'FELIPE-FAM10': 'Família 10',
-  'TESTE-FELIPE': 'Família Teste',
-};
+// Carregador Dinâmico dos códigos salvos
+function getFamilyCodes() {
+  try {
+    const saved = localStorage.getItem('rsvp_family_codes');
+    if (saved) return JSON.parse(saved);
+  } catch(e) {}
+  
+  // Lista padrão caso o localStorage esteja vazio inicialmente
+  return {
+    'FELIPE-FAM01': { name: 'Família 01', members: [] },
+    'FELIPE-FAM02': { name: 'Família 02', members: [] },
+    'FELIPE-FAM03': { name: 'Família 03', members: [] },
+    'TESTE-FELIPE': { name: 'Família Teste', members: ['Convidado Exemplo 1', 'Convidado Exemplo 2'] },
+  };
+}
+
+function getFamilyName(code) {
+  const codes = getFamilyCodes();
+  if (!codes[code]) return code;
+  return typeof codes[code] === 'object' ? codes[code].name : codes[code];
+}
 
 // ── AUTH ──
 function login() {
@@ -460,111 +428,136 @@ if (sessionStorage.getItem('admin_auth') === '1') {
   }, 100);
 }
 
-// ── CONTROLE DE ABAS ──
-function switchTab(tab) {
-  const btnRsvp = document.getElementById('tab-btn-rsvp');
-  const btnTexts = document.getElementById('tab-btn-texts');
-  const contentRsvp = document.getElementById('tab-content-rsvp');
-  const contentTexts = document.getElementById('tab-content-texts');
+// ── SISTEMA DE ABAS ──
+function showTab(tabName) {
+  const tabConf = document.getElementById('tab-conf');
+  const tabTxt = document.getElementById('tab-txt');
+  const tabReg = document.getElementById('tab-reg');
+  const abaConf = document.getElementById('aba-confirmacoes');
+  const abaTxt = document.getElementById('aba-textos');
+  const abaReg = document.getElementById('aba-cadastro');
 
-  if(tab === 'rsvp') {
-    btnRsvp.classList.add('active');
-    btnTexts.classList.remove('active');
-    contentRsvp.style.display = 'block';
-    contentTexts.style.display = 'none';
-  } else {
-    btnTexts.classList.add('active');
-    btnRsvp.classList.remove('active');
-    contentTexts.style.display = 'block';
-    contentRsvp.style.display = 'none';
+  tabConf.classList.remove('active');
+  tabTxt.classList.remove('active');
+  tabReg.classList.remove('active');
+  abaConf.style.display = 'none';
+  abaTxt.style.display = 'none';
+  abaReg.style.display = 'none';
+
+  if (tabName === 'confirmacoes') {
+    tabConf.classList.add('active');
+    abaConf.style.display = 'block';
+  } else if (tabName === 'textos') {
+    tabTxt.classList.add('active');
+    abaTxt.style.display = 'block';
+  } else if (tabName === 'cadastro') {
+    tabReg.classList.add('active');
+    abaReg.style.display = 'block';
+    renderRegisteredCodesTable();
   }
 }
 
-// ── SISTEMA DE SALVAMENTO DE TEXTOS DINÂMICOS ──
+// ── DINÂMICA DE CRIAÇÃO DE INTEGRANTES (ADMIN) ──
+function addRegMemberInput(value = '') {
+  const container = document.getElementById('reg-members-inputs');
+  const div = document.createElement('div');
+  div.style.cssText = 'display: flex; gap: 0.5rem;';
+  div.innerHTML = `
+    <input type="text" class="form-input reg-member-name" placeholder="Nome completo do integrante" value="${value}" style="flex: 1;">
+    <button class="toolbar-btn danger" style="padding:0 0.8rem; border-color:rgba(224,85,85,0.3); color:#f09090;" onclick="this.parentElement.remove()">×</button>
+  `;
+  container.appendChild(div);
+}
+
+function registerFamily() {
+  const name = document.getElementById('reg-family-name').value.trim();
+  const code = document.getElementById('reg-family-code').value.trim().toUpperCase();
+  
+  if (!name || !code) {
+    alert('Por favor, defina o Nome da Família e o Código!');
+    return;
+  }
+
+  const memberInputs = document.querySelectorAll('.reg-member-name');
+  const members = [];
+  memberInputs.forEach(input => {
+    if (input.value.trim()) members.push(input.value.trim());
+  });
+
+  const codes = getFamilyCodes();
+  codes[code] = { name: name, members: members };
+
+  localStorage.setItem('rsvp_family_codes', JSON.stringify(codes));
+  
+  document.getElementById('reg-family-name').value = '';
+  document.getElementById('reg-family-code').value = '';
+  document.getElementById('reg-members-inputs').innerHTML = '';
+  
+  alert(`Família registrada com sucesso!\nCódigo: ${code}`);
+  renderAll();
+  renderRegisteredCodesTable();
+}
+
+function renderRegisteredCodesTable() {
+  const codes = getFamilyCodes();
+  const tbody = document.getElementById('registered-codes-table-body');
+  tbody.innerHTML = '';
+
+  Object.entries(codes).forEach(([code, data]) => {
+    const famName = typeof data === 'object' ? data.name : data;
+    const famMembers = typeof data === 'object' && data.members ? data.members.join(', ') : '—';
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="td-code">${code}</td>
+      <td class="td-family">${famName}</td>
+      <td style="color: rgba(255,255,255,0.5); font-size: 0.9rem; font-style:italic;">${famMembers}</td>
+      <td>
+        <button class="toolbar-btn danger" onclick="deleteRegisteredFamily('${code}')" style="border-color:rgba(224,85,85,0.2);color:rgba(224,85,85,0.5);padding:0.3rem 0.7rem;font-size:0.55rem">
+          Excluir Código
+        </button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function deleteRegisteredFamily(code) {
+  if (!confirm(`Excluir permanentemente o código "${code}"?`)) return;
+  const codes = getFamilyCodes();
+  delete codes[code];
+  localStorage.setItem('rsvp_family_codes', JSON.stringify(codes));
+  renderAll();
+  renderRegisteredCodesTable();
+}
+
+// ── MANIPULAÇÃO DOS TEXTOS DA FESTA ──
 function saveTexts() {
-  const settings = {
-    narr1: document.getElementById('txt-narr1').value,
-    narr2: document.getElementById('txt-narr2').value,
-    inviteSub: document.getElementById('txt-invite-sub').value,
-    name: document.getElementById('txt-name').value,
-    aninho: document.getElementById('txt-aninho').value,
-    planetSub: document.getElementById('txt-planet-sub').value,
-    planetLabel: document.getElementById('txt-planet-label').value,
-    quoteBody: document.getElementById('txt-quote-body').value,
-    quoteAuthor: document.getElementById('txt-quote-author').value,
-    eventDate: document.getElementById('txt-event-date').value,
-    eventTime: document.getElementById('txt-event-time').value,
-    eventLocation: document.getElementById('txt-event-location').value,
-    eventMaps: document.getElementById('txt-event-maps').value,
-    eventTraje: document.getElementById('txt-event-traje').value,
-    eventDeadline: document.getElementById('txt-event-deadline').value,
-    msgTitle: document.getElementById('txt-msg-title').value,
-    msgP1: document.getElementById('txt-msg-p1').value,
-    msgP2: document.getElementById('txt-msg-p2').value,
-    msgSign: document.getElementById('txt-msg-sign').value,
-    rsvpTitle: document.getElementById('txt-rsvp-title').value,
-    rsvpSub: document.getElementById('txt-rsvp-sub').value,
-    rsvpWppLink: document.getElementById('txt-rsvp-wpp-link').value,
-    rsvpTelLabel: document.getElementById('txt-rsvp-tel-label').value,
-  };
+  const settings = JSON.parse(localStorage.getItem('felipe_party_details') || '{}');
+  settings.eventDate = document.getElementById('txt-event-date').value;
+  settings.eventTime = document.getElementById('txt-event-time').value;
+  settings.eventLocation = document.getElementById('txt-event-location').value;
+  settings.eventMaps = document.getElementById('txt-event-maps').value;
+  settings.eventDeadline = document.getElementById('txt-event-deadline').value;
 
   localStorage.setItem('felipe_party_details', JSON.stringify(settings));
-  alert('✨ Todos os textos e informações da festa foram guardados e aplicados no convite!');
+  alert('✨ Textos salvos com sucesso!');
 }
 
 function loadTexts() {
   const data = localStorage.getItem('felipe_party_details');
-  
-  // Valores default idênticos aos seus originais do HTML para preenchimento automático inicial
   const d = data ? JSON.parse(data) : {
-    narr1: 'Em um pequeno planeta,',
-    narr2: 'nasceu um príncipe muito especial...',
-    inviteSub: 'Você está cordialmente convidado para o 1º aniversário do',
-    name: 'Felipe',
-    aninho: '✦   1 Aninho   ✦',
-    planetSub: 'E o amor cresceu como as estrelas no céu...',
-    planetLabel: 'Venha celebrar este momento mágico',
-    quoteBody: 'Todas as pessoas grandes foram um dia crianças —\nmas poucas se lembram disso.',
-    quoteAuthor: 'Antoine de Saint-Exupéry  ·  O Pequeno Príncipe',
-    eventDate: '18 de Julho\nde 2025',
-    eventTime: 'Das 13h30\nàs 17h30',
-    eventLocation: 'Rua Paraná, 225  ·  Vila Irene\nSão Roque – SP',
+    eventDate: '18 de Julho de 2026',
+    eventTime: 'Das 13h30 às 17h30',
+    eventLocation: 'Rua Paraná, 225  ·  Vila Irene São Roque – SP',
     eventMaps: 'https://maps.google.com/?q=Rua+Paraná+225+Vila+Irene+São+Roque+SP',
-    eventTraje: 'Social\nElegante',
-    eventDeadline: '10 de Julho\nde 2025',
-    msgTitle: 'Sua presença tornará\neste dia ainda mais especial',
-    msgP1: 'Venha viver conosco uma tarde repleta de amor,\nsonhos e momentos que ficarão para sempre\ngravados em nossas memórias e em nossos corações.',
-    msgP2: 'Como o Pequeno Príncipe que cuidava da sua rosa única,\ncada convidado é precioso e insubstituível para nós.',
-    msgSign: 'Esperamos por você!',
-    rsvpTitle: 'Confirme sua\npresença',
-    rsvpSub: 'Para que possamos preparar tudo com carinho\npara cada família, pedimos sua confirmação.',
-    rsvpWppLink: 'https://wa.me/5515996774272?text=Olá!%20Confirmo%20minha%20presença%20no%201º%20aniversário%20do%20Felipe%20👑',
-    rsvpTelLabel: '(15) 99677-4272'
+    eventDeadline: '10 de Junho de 2026'
   };
-
-  document.getElementById('txt-narr1').value = d.narr1;
-  document.getElementById('txt-narr2').value = d.narr2;
-  document.getElementById('txt-invite-sub').value = d.inviteSub;
-  document.getElementById('txt-name').value = d.name;
-  document.getElementById('txt-aninho').value = d.aninho;
-  document.getElementById('txt-planet-sub').value = d.planetSub;
-  document.getElementById('txt-planet-label').value = d.planetLabel;
-  document.getElementById('txt-quote-body').value = d.quoteBody;
-  document.getElementById('txt-quote-author').value = d.quoteAuthor;
-  document.getElementById('txt-event-date').value = d.eventDate;
-  document.getElementById('txt-event-time').value = d.eventTime;
-  document.getElementById('txt-event-location').value = d.eventLocation;
-  document.getElementById('txt-event-maps').value = d.eventMaps;
-  document.getElementById('txt-event-traje').value = d.eventTraje;
-  document.getElementById('txt-event-deadline').value = d.eventDeadline;
-  document.getElementById('txt-msg-title').value = d.msgTitle;
-  document.getElementById('txt-msg-p1').value = d.msgP1;
-  document.getElementById('txt-msg-p2').value = d.msgP2;
-  document.getElementById('txt-msg-sign').value = d.msgSign;
-  document.getElementById('txt-rsvp-title').value = d.rsvpTitle;
-  document.getElementById('txt-rsvp-sub').value = d.rsvpSub;
-  document.getElementById('txt-rsvp-wpp-link').value = d.rsvpWppLink;
-  document.getElementById('txt-rsvp-tel-label').value = d.rsvpTelLabel;
+  document.getElementById('txt-event-date').value = d.eventDate || '';
+  document.getElementById('txt-event-time').value = d.eventTime || '';
+  document.getElementById('txt-event-location').value = d.eventLocation || '';
+  document.getElementById('txt-event-maps').value = d.eventMaps || '';
+  document.getElementById('txt-event-deadline').value = d.eventDeadline || '';
 }
 
 // ── DADOS DO RSVP ──
@@ -582,7 +575,7 @@ function renderAll() {
 function updateStats() {
   const confirmed = getConfirmed();
   const codes = Object.keys(confirmed);
-  const totalFamilies = Object.keys(FAMILY_CODES).length;
+  const totalFamilies = Object.keys(getFamilyCodes()).length;
   const totalMembers = codes.reduce((sum, c) => sum + (confirmed[c].members?.length || 0), 0);
 
   document.getElementById('stat-confirmed').textContent = codes.length;
@@ -651,12 +644,16 @@ function toggleMembers(id) {
 function renderPending() {
   const confirmed = getConfirmed();
   const grid = document.getElementById('pending-grid');
-  const pending = Object.entries(FAMILY_CODES).filter(([code]) => !confirmed[code]);
-  grid.innerHTML = pending.map(([code, name]) => `<div class="pending-chip">${name}</div>`).join('') || '<p style="color:rgba(201,168,76,0.4);font-style:italic;font-size:0.9rem">Todas as famílias confirmaram! 🎉</p>';
+  const pending = Object.entries(getFamilyCodes()).filter(([code]) => !confirmed[code]);
+  
+  grid.innerHTML = pending.map(([code, data]) => {
+    const name = typeof data === 'object' ? data.name : data;
+    return `<div class="pending-chip">${name}</div>`;
+  }).join('') || '<p style="color:rgba(201,168,76,0.4);font-style:italic;font-size:0.9rem">Todas as famílias confirmaram! 🎉</p>';
 }
 
 function removeEntry(code) {
-  if (!confirm(`Remover confirmação de ${FAMILY_CODES[code] || code}? O código poderá ser usado novamente.`)) return;
+  if (!confirm(`Remover confirmação de ${getFamilyName(code)}? O código poderá ser usado novamente.`)) return;
   const confirmed = getConfirmed();
   delete confirmed[code];
   localStorage.setItem('rsvp_confirmed', JSON.stringify(confirmed));
