@@ -145,4 +145,470 @@ body{
 .s1-inner{text-align:center;max-width:760px;width:100%;}
 .top-rule{ display:flex;align-items:center;justify-content:center;gap:.8rem; margin-bottom:2.8rem; opacity:0;animation:fadeIn 1.2s .3s ease forwards; }
 .top-rule-line{ height:1px;width:80px; background:linear-gradient(to right,transparent,var(--gold)); }
-.top-rule-line.r{background:linear-gradient(to left
+.top-rule-line.r{background:linear-gradient(to left,transparent,var(--gold));}
+.top-rule-gem{ width:5px;height:5px;background:var(--gold); transform:rotate(45deg); box-shadow:0 0 10px rgba(201,168,76,.7); }
+.crown-wrap{ opacity:0; animation:crown-drop 1.2s .5s cubic-bezier(.22,1,.36,1) forwards; margin-bottom:1.8rem; }
+.crown-wrap svg{ width:90px; filter:drop-shadow(0 0 12px rgba(201,168,76,.5)) drop-shadow(0 0 30px rgba(201,168,76,.2)); }
+.eyebrow{ font-family:'Cinzel',serif; font-size:clamp(.55rem,.9vw,.7rem); letter-spacing:.7em; color:var(--gold); text-transform:uppercase; opacity:0;animation:fadeIn 1s 1.2s ease forwards; margin-bottom:3rem; }
+.narr{ font-family:'Cormorant Garamond',serif; font-weight:200; font-style:italic; font-size:clamp(1.4rem,3.5vw,2.1rem); color:rgba(245,232,192,.75); line-height:1.6; letter-spacing:.04em; opacity:0;animation:fadeUp .9s ease forwards; }
+.narr-1{animation-delay:1.5s;} .narr-2{animation-delay:1.9s;}
+.c-div{ display:flex;align-items:center;justify-content:center;gap:1rem; margin:2.2rem auto; opacity:0;animation:fadeIn .8s 2.5s ease forwards; }
+.c-div-line{height:1px;width:0;background:var(--gold);animation:line-draw 1.2s 2.8s ease forwards;}
+.c-div-star{font-size:.7rem;color:var(--gold);opacity:.8;}
+.felipe-name{ font-family:'Great Vibes',cursive; font-size:clamp(4.5rem,14vw,8.5rem); line-height:1; letter-spacing:.02em; color:transparent; background:linear-gradient(135deg,#a07828 0%,#f5d060 30%,#fff8d0 50%,#f5d060 70%,#a07828 100%); background-size:200% auto; -webkit-background-clip:text; background-clip:text; animation: fadeUp .9s 2.2s ease forwards, shimmer 4s 3.5s linear infinite; opacity:0; filter:drop-shadow(0 0 30px rgba(201,168,76,.25)); display:block; margin:.4rem 0; }
+.invite-sub{ font-family:'Cormorant Garamond',serif; font-weight:200; font-size:clamp(1rem,2.5vw,1.35rem); color:rgba(245,232,192,.7); letter-spacing:.08em; font-style:italic; opacity:0;animation:fadeIn 1s 3s ease forwards; margin-bottom:1.8rem; }
+.aninho-wrap{ opacity:0;animation:scalein .9s 3.4s cubic-bezier(.22,1,.36,1) forwards; display:inline-block;margin-bottom:3rem; }
+.aninho{ display:inline-block; font-family:'Cinzel',serif; font-size:clamp(.8rem,2vw,1rem); font-weight:600; letter-spacing:.35em; text-transform:uppercase; color:#04091a; padding:.6rem 3rem; background:linear-gradient(90deg,#7a5a18,#c9a84c,#f5d060,#c9a84c,#7a5a18); background-size:200% auto; clip-path:polygon(14px 0%,calc(100% - 14px) 0%,100% 50%,calc(100% - 14px) 100%,14px 100%,0% 50%); box-shadow:0 4px 24px rgba(201,168,76,.4),0 0 60px rgba(201,168,76,.1); animation:shimmer 3s 4s linear infinite; }
+.scroll-cta{ display:flex;flex-direction:column;align-items:center;gap:1rem; opacity:0;animation:fadeIn 1s 4.2s ease forwards; }
+.scroll-cta-txt{ font-family:'Cinzel',serif; font-size:.55rem;letter-spacing:.55em; color:rgba(201,168,76,.55);text-transform:uppercase; }
+.scroll-arr{ width:18px;height:18px; border-right:1px solid rgba(201,168,76,.5); border-bottom:1px solid rgba(201,168,76,.5); transform:rotate(45deg); animation:bounce-arrow 2.2s ease-in-out infinite; }
+
+/* ── CENA 2 ── */
+#s2{min-height:100vh;justify-content:center;}
+.planet-scene{ position:relative; width:400px;height:400px; margin:0 auto 3rem; }
+.planet-body{ position:absolute; bottom:0;left:50%;transform:translateX(-50%); width:280px;height:140px; border-radius:50%; background:radial-gradient(ellipse at 38% 35%, #9a7860, #5a4028 55%, #3a2410); box-shadow: inset -40px -18px 50px rgba(0,0,0,.6), inset 20px 12px 35px rgba(200,150,90,.15), 0 30px 80px rgba(60,35,15,.65); overflow:hidden; }
+.planet-body::before{ content:'';position:absolute; top:20px;left:30px; width:80px;height:26px; background:rgba(255,210,140,.08); border-radius:50%; transform:rotate(-18deg); }
+.planet-body::after{ content:'';position:absolute; bottom:10px;right:35px; width:60px;height:20px; background:rgba(40,20,10,.35); border-radius:50%; transform:rotate(12deg); }
+.planet-ring{ position:absolute; bottom:36px;left:50%;transform:translateX(-50%); width:360px;height:65px; border:1.5px solid rgba(201,168,76,.22); border-radius:50%; box-shadow: 0 0 20px rgba(201,168,76,.08), inset 0 0 15px rgba(201,168,76,.05); }
+.planet-ring-inner{ position:absolute; bottom:40px;left:50%;transform:translateX(-50%); width:320px;height:55px; border:1px solid rgba(201,168,76,.12); border-radius:50%; }
+.rose-dome{ position:absolute; bottom:138px;right:35px; width:65px;height:90px; animation:rose-sway 3.5s ease-in-out infinite; transform-origin:bottom center; filter:drop-shadow(0 8px 16px rgba(0,0,0,.45)); }
+.prince-figure{ position:absolute; bottom:138px;left:50%; transform:translateX(-50%); width:105px; animation:prince-float 4.5s ease-in-out infinite; filter:drop-shadow(0 15px 30px rgba(0,0,0,.6)); }
+.fox-figure{ position:absolute; bottom:138px;left:28px; width:70px; animation:fox-wag 4s ease-in-out infinite; transform-origin:bottom center; filter:drop-shadow(0 8px 18px rgba(0,0,0,.5)); }
+.scene-text{ text-align:center; max-width:580px; width: 100%; display: flex; flex-direction: column; align-items: center; }
+.scene-subtitle{ font-family:'Cormorant Garamond',serif; font-weight:200; font-style:italic; font-size:clamp(1.3rem,3.5vw,1.8rem); line-height:1.65; color:rgba(245,232,192,.75); letter-spacing:.02em; margin-bottom:1rem; }
+.scene-label{ font-family:'Cinzel',serif; font-size:clamp(.52rem,.8vw,.62rem); letter-spacing:.55em; color:var(--gold); text-transform:uppercase; opacity:.6; }
+
+/* ── CENA 3 ── */
+#s3{min-height:70vh;}
+.quote-scene{max-width:680px;text-align:center;}
+.quote-open{ font-family:'Cormorant Garamond',serif; font-size:8rem;line-height:.5; color:var(--gold); opacity:.2;display:block; margin-bottom:.5rem; }
+.quote-body{ font-family:'Cormorant Garamond',serif; font-weight:200; font-style:italic; font-size:clamp(1.5rem,4vw,2.2rem); line-height:1.65; color:var(--gold-pale); letter-spacing:.02em; white-space:pre-line; }
+.quote-author{ display:block;margin-top:2rem; font-family:'Cinzel',serif; font-size:clamp(.55rem,.85vw,.68rem); letter-spacing:.55em; color:var(--gold); text-transform:uppercase; opacity:.7; }
+.quote-deco{ display:flex;align-items:center;justify-content:center; gap:.6rem;margin-top:1.8rem; }
+.quote-deco span{width:40px;height:1px;background:linear-gradient(to right,transparent,var(--gold));}
+.quote-deco span:last-child{background:linear-gradient(to left,transparent,var(--gold));}
+.quote-deco i{width:4px;height:4px;background:var(--gold);transform:rotate(45deg);}
+
+/* ── CENA 4 ── */
+.ev-outer{width:100%;max-width:760px;}
+.section-eyebrow{ font-family:'Cinzel',serif; font-size:clamp(.52rem,.8vw,.65rem); letter-spacing:.65em; color:var(--gold); text-transform:uppercase; display:block; margin-bottom:1rem; }
+.section-title{ font-family:'Cormorant Garamond',serif; font-weight:200; font-style:italic; font-size:clamp(2rem,5vw,3.2rem); line-height:1.2; color:var(--cream); margin-bottom:.5rem; text-align: center; width: 100%; }
+.section-title em{ color:var(--gold-glow); font-style:italic; }
+.section-rule{ display:flex;align-items:center;gap:1rem; margin:1.5rem 0 3rem; }
+.section-rule::before,.section-rule::after{ content:'';flex:1;height:1px; background:linear-gradient(to right,transparent,rgba(201,168,76,.3)); }
+.section-rule::after{background:linear-gradient(to left,transparent,rgba(201,168,76,.3));}
+.section-rule span{ font-size:.6rem;color:var(--gold);opacity:.6; }
+.ev-card{ border:1px solid rgba(201,168,76,.2); padding:3.5rem 3rem; background:rgba(2,12,30,.55); backdrop-filter:blur(20px); position:relative; box-shadow:0 0 80px rgba(0,0,0,.4),inset 0 0 60px rgba(201,168,76,.02); }
+.ev-card .c{position:absolute;width:32px;height:32px;border-color:var(--gold);border-style:solid;opacity:.4;}
+.ev-card .c.tl{top:-1px;left:-1px;border-width:1px 0 0 1px;}
+.ev-card .c.tr{top:-1px;right:-1px;border-width:1px 1px 0 0;}
+.ev-card .c.bl{bottom:-1px;left:-1px;border-width:0 0 1px 1px;}
+.ev-card .c.br{bottom:-1px;right:-1px;border-width:0 1px 1px 0;}
+.ev-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem 3rem;}
+@media(max-width:540px){.ev-grid{grid-template-columns:1fr;gap:2rem;}}
+.ev-item{display:flex;align-items:flex-start;gap:1.2rem;}
+.ev-icon-wrap{ width:50px;height:50px;flex-shrink:0; border:1px solid rgba(201,168,76,.3); display:flex;align-items:center;justify-content:center; font-size:1.3rem; background:rgba(201,168,76,.04); position:relative; }
+.ev-icon-wrap::before,.ev-icon-wrap::after{ content:'';position:absolute;width:7px;height:7px; border-color:rgba(201,168,76,.5);border-style:solid; }
+.ev-icon-wrap::before{top:-1px;left:-1px;border-width:1px 0 0 1px;}
+.ev-icon-wrap::after{bottom:-1px;right:-1px;border-width:0 1px 1px 0;}
+.ev-lbl{ font-family:'Cinzel',serif; font-size:.52rem;letter-spacing:.38em; color:var(--gold);text-transform:uppercase; display:block;margin-bottom:.4rem;opacity:.8; }
+.ev-val{ font-family:'Cormorant Garamond',serif; font-size:clamp(1rem,2.5vw,1.15rem); font-weight:300;line-height:1.5; color:var(--cream); white-space:pre-line; }
+.ev-sep{ grid-column:1/-1; height:1px; background:linear-gradient(to right,transparent,rgba(201,168,76,.15),transparent); margin:.5rem 0; }
+.map-link{ display:inline-block;margin-top:.5rem; font-family:'Cinzel',serif;font-size:.52rem; letter-spacing:.3em;color:var(--gold); text-decoration:none;text-transform:uppercase; opacity:.6;border-bottom:1px solid rgba(201,168,76,.25); transition:opacity .3s; }
+.map-link:hover{opacity:1;}
+
+/* ── CENA 5 ── */
+#s5{text-align:center;}
+.msg-inner{max-width:640px;}
+.msg-headline{ font-family:'Cormorant Garamond',serif; font-weight:200;font-style:italic; font-size:clamp(2rem,5.5vw,3.5rem); line-height:1.25; color:var(--cream); margin-bottom:2.5rem; letter-spacing:.02em; white-space:pre-line; }
+.msg-headline em{ display:block; color:transparent; background:linear-gradient(135deg,#c9a84c,#f7df90,#c9a84c); -webkit-background-clip:text;background-clip:text; animation:shimmer 5s linear infinite; background-size:200% auto; }
+.msg-body{ font-size:clamp(1.05rem,2.5vw,1.2rem); font-weight:300;font-style:italic; color:rgba(245,232,192,.7); line-height:2.1; margin-bottom:1.5rem; letter-spacing:.01em; white-space:pre-line; }
+.msg-heart{ display:block;margin:2.5rem auto; font-size:1.2rem;color:var(--red); letter-spacing:1rem; animation:glow-pulse 3s ease-in-out infinite; }
+.msg-sign{ font-family:'Great Vibes',cursive; font-size:clamp(2rem,6vw,3rem); color:var(--gold-glow); opacity:.8; text-shadow:0 0 24px rgba(201,168,76,.3); display:block; margin-top:.5rem; }
+
+/* ── CENA 6 ── */
+#s6{text-align:center;}
+.rsvp-inner{max-width:580px;}
+.rsvp-title{ font-family:'Cormorant Garamond',serif; font-weight:200;font-style:italic; font-size:clamp(2rem,5.5vw,3.2rem); line-height:1.2; margin-bottom:1rem; letter-spacing:.03em; }
+.rsvp-sub{ font-size:clamp(1rem,2.5vw,1.15rem); font-weight:200;font-style:italic; color:rgba(245,232,192,.6); line-height:1.9;margin-bottom:2rem; white-space:pre-line; }
+.rsvp-deadline{ display:inline-flex;align-items:center;gap:.8rem; border:1px solid rgba(201,168,76,.25); padding:.6rem 2rem;margin-bottom:2.5rem; font-family:'Cinzel',serif; font-size:clamp(.52rem,.8vw,.65rem); letter-spacing:.4em; color:var(--gold-bright); text-transform:uppercase; background:rgba(201,168,76,.04); }
+.btn-rsvp{ display:inline-flex;align-items:center;justify-content:center;gap:.8rem; padding:1.2rem 3.5rem; font-family:'Cinzel',serif; font-size:clamp(.6rem,.9vw,.75rem); letter-spacing:.45em; text-transform:uppercase; text-decoration:none; color:#04091a; background:linear-gradient(90deg,#8a6018,#c9a84c,#f5d060,#c9a84c,#8a6018); background-size:200% auto; box-shadow:0 6px 40px rgba(201,168,76,.35),0 0 80px rgba(201,168,76,.08); transition:box-shadow .4s,transform .3s; animation:shimmer 4s linear infinite; cursor:pointer;border:none; font-weight:600; }
+.btn-rsvp:hover{ transform:translateY(-3px); box-shadow:0 12px 60px rgba(201,168,76,.55),0 0 100px rgba(201,168,76,.15); }
+.or-div{ margin:2rem 0; display:flex;align-items:center;justify-content:center;gap:1rem; font-family:'Cinzel',serif;font-size:.52rem; letter-spacing:.35em;color:rgba(201,168,76,.3);text-transform:uppercase; }
+.or-div::before,.or-div::after{ content:'';width:50px;height:1px; background:rgba(201,168,76,.15); }
+.btn-wpp{ display:inline-flex;align-items:center;gap:.8rem; padding:1rem 2.5rem; background:transparent; border:1px solid rgba(74,185,100,.3); color:#7dd89a; font-family:'Cinzel',serif; font-size:clamp(.58rem,.85vw,.7rem); letter-spacing:.3em;text-transform:uppercase; text-decoration:none; transition:all .3s; }
+.btn-wpp:hover{background:rgba(74,185,100,.07);border-color:rgba(74,185,100,.6);}
+.rsvp-tel{ margin-top:1.5rem; font-family:'Cinzel',serif; font-size:.58rem;letter-spacing:.3em; color:rgba(201,168,76,.3);text-transform:uppercase; }
+
+/* ── FOOTER ── */
+footer{ position:relative;z-index:2; text-align:center;padding:4rem 2rem; border-top:1px solid rgba(201,168,76,.08); }
+.ft-ornament{ display:flex;align-items:center;justify-content:center; gap:.6rem;margin-bottom:1.5rem; }
+.ft-ornament span{width:60px;height:1px;background:linear-gradient(to right,transparent,rgba(201,168,76,.25));}
+.ft-ornament span:last-child{background:linear-gradient(to left,transparent,rgba(201,168,76,.25));}
+.ft-ornament i{width:4px;height:4px;background:rgba(201,168,76,.4);transform:rotate(45deg);}
+.ft-txt{font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.5em;color:rgba(201,168,76,.28);text-transform:uppercase;}
+.ft-name{ font-family:'Great Vibes',cursive; font-size:2rem;color:var(--gold);opacity:.3; display:block;margin-top:.5rem; }
+
+@media(max-width:600px){
+  .ev-card{padding:2.5rem 1.5rem;} .scene{padding:4rem 1.2rem;}
+  .planet-scene{width:320px;height:320px;} .planet-body{width:220px;height:110px;}
+  .planet-ring{width:290px;bottom:28px;} .prince-figure{width:85px;bottom:108px;}
+  .fox-figure{width:55px;bottom:108px;left:20px;} .rose-dome{width:50px;height:70px;bottom:108px;right:25px;}
+  .music-ctrl{width:48px;height:48px;bottom:1.5rem;right:1.5rem;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="sky"></canvas>
+
+<div class="music-ctrl" id="music-ctrl" title="Tocar/Pausar música">
+  <svg viewBox="0 0 24 24" id="music-icon">
+    <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+  </svg>
+</div>
+
+<audio id="bg-music" loop></audio>
+
+<section class="scene" id="s1">
+<div class="s1-inner">
+  <div class="top-rule">
+    <div class="top-rule-line"></div><div class="top-rule-gem"></div>
+    <div class="top-rule-gem" style="opacity:.4;width:3px;height:3px;"></div>
+    <div class="top-rule-gem"></div><div class="top-rule-line r"></div>
+  </div>
+
+  <div class="crown-wrap">
+    <svg viewBox="0 0 120 72" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="cg1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#7a5a14"/><stop offset="25%" stop-color="#c9a84c"/>
+          <stop offset="50%" stop-color="#f7df80"/><stop offset="75%" stop-color="#c9a84c"/>
+          <stop offset="100%" stop-color="#7a5a14"/>
+        </linearGradient>
+      </defs>
+      <path d="M60 3 C57 10 53 12 51 17 C56 15 58 18 60 22 C62 18 64 15 69 17 C77 12 63 10 60 3Z" fill="url(#cg1)"/>
+      <ellipse cx="60" cy="24" rx="5" ry="3.5" fill="url(#cg1)"/>
+      <path d="M12 62 L22 26 L36 47 L60 12 L84 47 L98 26 L108 62 Z" fill="url(#cg1)"/>
+      <rect x="10" y="60" width="100" height="11" rx="3" fill="url(#cg1)"/>
+      <circle cx="60" cy="42" r="5" fill="#c03040" opacity=".95"/>
+      <circle cx="36" cy="54" r="3.5" fill="#3858c0" opacity=".9"/>
+      <circle cx="84" cy="54" r="3.5" fill="#3858c0" opacity=".9"/>
+      <circle cx="22" cy="26" r="4" fill="#f5e060"/><circle cx="98" cy="26" r="4" fill="#f5e060"/><circle cx="60" cy="12" r="5" fill="#f5e060"/>
+    </svg>
+  </div>
+
+  <p class="eyebrow">✦   O Pequeno Príncipe   ✦</p>
+
+  <p class="narr narr-1" id="dyn-narr1">Em um pequeno planeta,</p>
+  <p class="narr narr-2" id="dyn-narr2">nasceu um príncipe muito especial...</p>
+
+  <div class="c-div">
+    <div class="c-div-line"></div><span class="c-div-star">✦</span><div class="c-div-line"></div>
+  </div>
+
+  <p class="invite-sub" id="dyn-invite-sub">Você está convidado para o 1º aniversário do</p>
+
+  <span class="felipe-name" id="dyn-name">Felipe</span>
+
+  <div class="aninho-wrap">
+    <span class="aninho" id="dyn-aninho">✦   1 Ano   ✦</span>
+  </div>
+
+  <div class="scroll-cta">
+    <span class="scroll-cta-txt">Descubra o convite</span>
+    <div class="scroll-arr"></div>
+  </div>
+</div>
+</section>
+
+<div class="scene-divider"><div class="div-gem"></div></div>
+
+<section class="scene" id="s2">
+  <div class="planet-scene rev">
+    <div class="planet-ring"></div><div class="planet-ring-inner"></div><div class="planet-body"></div>
+
+    <svg class="rose-dome" viewBox="0 0 65 90" xmlns="http://www.w3.org/2000/svg">
+      <line x1="32" y1="90" x2="32" y2="48" stroke="#3a6a32" stroke-width="2.5"/>
+      <ellipse cx="24" cy="70" rx="10" ry="5" fill="#4a7a42" transform="rotate(-35 24 70)"/>
+      <ellipse cx="40" cy="65" rx="9" ry="4.5" fill="#4a7a42" transform="rotate(30 40 65)"/>
+      <circle cx="32" cy="38" r="12" fill="#b03040" opacity=".95"/>
+      <circle cx="28" cy="35" r="9" fill="#d04050" opacity=".85"/>
+      <circle cx="32" cy="34" r="6.5" fill="#e85060" opacity=".9"/>
+      <circle cx="33" cy="36" r="4" fill="#ff7080"/><circle cx="31" cy="38" r="2.5" fill="#ffa0a8"/>
+      <ellipse cx="32" cy="52" rx="20" ry="6.5" stroke="rgba(180,210,255,.35)" stroke-width="1.2" fill="rgba(180,220,255,.04)"/>
+      <path d="M12 52 Q12 22 32 16 Q52 22 52 52" stroke="rgba(180,210,255,.3)" stroke-width="1.2" fill="rgba(180,220,255,.025)"/>
+      <ellipse cx="20" cy="30" rx="4" ry="8" fill="rgba(255,255,255,.08)" transform="rotate(-20 20 30)"/>
+    </svg>
+
+    <svg class="prince-figure" viewBox="0 0 100 160" xmlns="http://www.w3.org/2000/svg">
+      <path d="M30 68 Q15 105 11 135 L89 135 Q85 105 70 68 Z" fill="#1a3580" opacity=".96"/>
+      <path d="M30 68 Q23 100 21 135 L42 135 Q38 95 35 68 Z" fill="#2a48a0" opacity=".5"/>
+      <rect x="32" y="63" width="36" height="48" rx="6" fill="#1a3580"/>
+      <rect x="32" y="63" width="36" height="9" rx="3" fill="#cc2030"/>
+      <rect x="45" y="67" width="10" height="42" fill="#c9a84c" opacity=".28"/>
+      <circle cx="50" cy="74" r="2" fill="#c9a84c"/><circle cx="50" cy="83" r="2" fill="#c9a84c"/><circle cx="50" cy="92" r="2" fill="#c9a84c"/>
+      <rect x="32" y="104" width="15" height="28" rx="5" fill="#e8e8f5"/><rect x="53" y="104" width="15" height="28" rx="5" fill="#e8e8f5"/>
+      <ellipse cx="39" cy="133" rx="10" ry="6" fill="#1a1a2a"/><ellipse cx="60" cy="133" rx="10" ry="6" fill="#1a1a2a"/>
+      <rect x="31" y="102" width="38" height="6" rx="2.5" fill="#c9a84c" opacity=".88"/><rect x="45" y="101" width="10" height="8" rx="2" fill="#e8c060"/>
+      <rect x="42" y="55" width="16" height="13" rx="3" fill="#f8cca8"/>
+      <path d="M31 65 Q50 59 69 65" stroke="#e8c060" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <path d="M61 65 L66 84" stroke="#e8c060" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="50" cy="40" r="22" fill="#f8cca8"/><ellipse cx="50" cy="25" rx="22" ry="11" fill="#5a3018"/>
+      <path d="M28 38 Q26 19 36 17 Q45 15 48 23" fill="#5a3018"/><path d="M72 38 Q74 19 64 17 Q55 15 52 23" fill="#5a3018"/><path d="M29 35 Q38 27 50 25 Q62 27 71 35" fill="#5a3018"/>
+      <path d="M31 36 Q40 30 50 29 Q60 30 69 36" fill="#6a3820" opacity=".7"/>
+      <circle cx="41" cy="42" r="5.5" fill="#2a1810"/><circle cx="59" cy="42" r="5.5" fill="#2a1810"/>
+      <circle cx="42.5" cy="40.5" r="2.2" fill="white" opacity=".9"/><circle cx="60.5" cy="40.5" r="2.2" fill="white" opacity=".9"/>
+      <circle cx="44" cy="41" r=".9" fill="white" opacity=".6"/><circle cx="62" cy="41" r=".9" fill="white" opacity=".6"/>
+      <ellipse cx="35" cy="48" rx="7" ry="4.5" fill="#f0a090" opacity=".48"/><ellipse cx="65" cy="48" rx="7" ry="4.5" fill="#f0a090" opacity=".48"/>
+      <ellipse cx="50" cy="48" rx="2.8" ry="2" fill="#d09070" opacity=".5"/>
+      <path d="M43 53 Q50 59 57 53" stroke="#c07060" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M32 78 Q15 88 13 103" stroke="#1a3580" stroke-width="11" stroke-linecap="round" fill="none"/>
+      <path d="M68 78 Q85 86 88 100" stroke="#1a3580" stroke-width="11" stroke-linecap="round" fill="none"/>
+      <circle cx="13" cy="105" r="8" fill="#f8cca8"/><circle cx="88" cy="102" r="8" fill="#f8cca8"/>
+      <path d="M31 25 L35 12 L40 21 L50 6 L60 21 L65 12 L69 25 Z" fill="#c9a84c"/>
+      <rect x="30" y="23" width="40" height="8" rx="2" fill="#c9a84c"/>
+      <circle cx="50" cy="6" r="4" fill="#f5e060"/><circle cx="35" cy="12" r="3" fill="#f5e060"/><circle cx="65" cy="12" r="3" fill="#f5e060"/>
+      <circle cx="50" cy="27" r="3.5" fill="#c03848" opacity=".95"/><circle cx="38" cy="27" r="2.2" fill="#3858c0" opacity=".88"/><circle cx="62" cy="27" r="2.2" fill="#3858c0" opacity=".88"/>
+    </svg>
+
+    <svg class="fox-figure" viewBox="0 0 70 100" xmlns="http://www.w3.org/2000/svg">
+      <path d="M42 78 Q62 65 65 48 Q63 54 53 56 Q58 44 51 40" fill="#c06828"/><path d="M51 40 Q62 36 59 24 Q47 30 42 40" fill="#e08040"/>
+      <ellipse cx="32" cy="68" rx="18" ry="22" fill="#d07030"/><ellipse cx="32" cy="73" rx="10" ry="16" fill="#f0d090"/>
+      <ellipse cx="21" cy="91" rx="7" ry="5" fill="#b05820"/><ellipse cx="43" cy="91" rx="7" ry="5" fill="#b05820"/>
+      <ellipse cx="32" cy="46" rx="16" ry="18" fill="#d07030"/>
+      <path d="M18 37 L11 19 L25 31 Z" fill="#d07030"/><path d="M46 37 L53 19 L39 31 Z" fill="#d07030"/><path d="M18 37 L13 24 L23 33 Z" fill="#e08878"/><path d="M46 37 L51 24 L41 33 Z" fill="#e08878"/>
+      <ellipse cx="32" cy="53" rx="9" ry="6" fill="#f0d090"/><ellipse cx="32" cy="51" rx="3.5" ry="2.5" fill="#2a1008"/>
+      <circle cx="25" cy="44" r="3.5" fill="#2a1008"/><circle cx="39" cy="44" r="3.5" fill="#2a1008"/>
+      <circle cx="26" cy="43" r="1.2" fill="white" opacity=".7"/><circle cx="40" cy="43" r="1.2" fill="white" opacity=".7"/>
+    </svg>
+  </div>
+
+  <div class="scene-text rev d1">
+    <p class="scene-subtitle" id="dyn-planet-sub">Todas as pessoas grandes foram um dia crianças —<br>mas poucas se lembram disso.</p>
+    <span class="quote-author" id="dyn-quote-author">Antoine de Saint-Exupéry  ·  O Pequeno Príncipe<br><br></span>
+    <h2 class="section-title" id="dyn-planet-label" style="color: var(--gold-glow); text-align: center; width: 100%;">
+      <em>Venha celebrar este momento mágico</em>
+    </h2>
+  </div>
+</section>
+
+<div class="scene-divider"><div class="div-gem"></div></div>
+
+<section class="scene" id="s4">
+<div class="ev-outer">
+  <div style="text-align:center;margin-bottom:3rem;" class="rev">
+    <span class="section-eyebrow">✦   Informações do Evento   ✦</span>
+    <h2 class="section-title">Um momento<br><em>inesquecível</em></h2>
+    <div class="section-rule"><span>✦</span></div>
+  </div>
+
+  <div class="ev-card rev-scale">
+    <div class="c tl"></div><div class="c tr"></div><div class="c bl"></div><div class="c br"></div>
+
+    <div class="ev-grid">
+      <div class="ev-item">
+        <div class="ev-icon-wrap">📅</div>
+        <div>
+          <span class="ev-lbl">Data</span>
+          <span class="ev-val" id="dyn-event-date">18 de Julho de 2026</span>
+        </div>
+      </div>
+
+      <div class="ev-item">
+        <div class="ev-icon-wrap">⏰</div>
+        <div>
+          <span class="ev-lbl">Horário</span>
+          <span class="ev-val" id="dyn-event-time">Das 13h30 às 17h30</span>
+        </div>
+      </div>
+
+      <div class="ev-sep"></div>
+
+      <div class="ev-item" style="grid-column:1/-1">
+        <div class="ev-icon-wrap">📍</div>
+        <div>
+          <span class="ev-lbl">Localização</span>
+          <span class="ev-val" id="dyn-event-location">Rua Paraná, 225  ·  Vila Irene São Roque – SP</span>
+          <a class="map-link" id="dyn-event-maps" href="https://maps.google.com/?q=Rua+Paraná+225+Vila+Irene+São+Roque+SP" target="_blank">Ver no mapa →</a>
+        </div>
+      </div>
+
+      <div class="ev-sep"></div>
+
+      <div class="ev-item">
+        <div class="ev-icon-wrap">🌹</div>
+        <div>
+          <span class="ev-lbl">Confirmar até</span>
+          <span class="ev-val" id="dyn-event-deadline">10 de Junho de 2026</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<div class="scene-divider"><div class="div-gem"></div></div>
+
+<section class="scene" id="s5">
+<div class="msg-inner rev">
+  <span class="section-eyebrow">✦   Uma mensagem especial   ✦</span>
+  <h2 class="msg-headline" id="dyn-msg-title">Sua presença tornará<br><em>este dia ainda mais especial</em></h2>
+  <p class="msg-body" id="dyn-msg-p1">Venha viver conosco uma tarde repleta de amor,<br>sonhos e momentos que ficarão para sempre<br>gravados em nossas memórias e em nossos corações.</p>
+  <p class="msg-body" id="dyn-msg-p2">Como o Pequeno Príncipe que cuidava da sua rosa única,<br>cada convidado é precioso e insubstituível para nós.</p>
+  <span class="msg-heart">♥</span>
+  <span class="msg-sign" id="dyn-msg-sign">Esperamos por você!</span>
+</div>
+</section>
+
+<div class="scene-divider"><div class="div-gem"></div></div>
+
+<section class="scene" id="s6">
+<div class="rsvp-inner rev">
+  <span class="section-eyebrow">✦   Confirmação de Presença   ✦</span>
+  <h2 class="rsvp-title" id="dyn-rsvp-title">Confirme sua<br><em style="color:var(--gold-glow);font-style:italic;">presença</em></h2>
+  <p class="rsvp-sub" id="dyn-rsvp-sub">Para que possamos preparar tudo com carinho<br>para cada família, pedimos sua confirmação.</p>
+
+  <div class="rsvp-deadline">
+    <span style="opacity:.5">✦</span>
+    <span id="dyn-rsvp-deadline-badge">Confirmar até 10 de Junho de 2026</span>
+    <span style="opacity:.5">✦</span>
+  </div>
+
+  <br>
+  <a href="confirmar.html" class="btn-rsvp">✦   Confirmar Presença Online   ✦</a>
+</div>
+</section>
+  
+<footer>
+  <div class="ft-ornament"><span></span><i></i><span></span></div>
+  <p class="ft-txt">Com amor & estrelas  ·  2026</p>
+  <span class="ft-name" id="dyn-ft-name">Felipe</span>
+</footer>
+
+<script>
+/* ── INJEÇÃO DE TEXTOS DINÂMICOS SALVOS PELO PAINEL ADMIN ── */
+document.addEventListener("DOMContentLoaded", () => {
+  const savedData = localStorage.getItem('felipe_party_details');
+  if (savedData) {
+    try {
+      const d = JSON.parse(savedData);
+      if(d.narr1) document.getElementById('dyn-narr1').textContent = d.narr1;
+      if(d.narr2) document.getElementById('dyn-narr2').textContent = d.narr2;
+      if(d.inviteSub) document.getElementById('dyn-invite-sub').textContent = d.inviteSub;
+      if(d.name) {
+        document.getElementById('dyn-name').textContent = d.name;
+        document.getElementById('dyn-ft-name').textContent = d.name;
+      }
+      if(d.aninho) document.getElementById('dyn-aninho').textContent = d.aninho;
+      if(d.planetSub) document.getElementById('dyn-planet-sub').textContent = d.planetSub;
+      if(d.planetLabel) document.getElementById('dyn-planet-label').textContent = d.planetLabel;
+      if(d.quoteBody) document.getElementById('dyn-quote-body').innerText = d.quoteBody;
+      if(d.quoteAuthor) document.getElementById('dyn-quote-author').textContent = d.quoteAuthor;
+      if(d.eventDate) document.getElementById('dyn-event-date').innerText = d.eventDate;
+      if(d.eventTime) document.getElementById('dyn-event-time').innerText = d.eventTime;
+      if(d.eventLocation) document.getElementById('dyn-event-location').innerText = d.eventLocation;
+      if(d.eventMaps) document.getElementById('dyn-event-maps').setAttribute('href', d.eventMaps);
+      if(d.eventTraje) document.getElementById('dyn-event-traje').innerText = d.eventTraje;
+      if(d.eventDeadline) {
+        document.getElementById('dyn-event-deadline').innerText = d.eventDeadline;
+        document.getElementById('dyn-rsvp-deadline-badge').innerText = "Confirmar até " + d.eventDeadline.replace('\n', ' ');
+      }
+      if(d.msgTitle) document.getElementById('dyn-msg-title').innerText = d.msgTitle;
+      if(d.msgP1) document.getElementById('dyn-msg-p1').innerText = d.msgP1;
+      if(d.msgP2) document.getElementById('dyn-msg-p2').innerText = d.msgP2;
+      if(d.msgSign) document.getElementById('dyn-msg-sign').textContent = d.msgSign;
+      if(d.rsvpTitle) document.getElementById('dyn-rsvp-title').innerHTML = d.rsvpTitle.replace('\n', '<br>');
+      if(d.rsvpSub) document.getElementById('dyn-rsvp-sub').innerText = d.rsvpSub;
+      if(d.rsvpWppLink) document.getElementById('dyn-rsvp-wpp-link').setAttribute('href', d.rsvpWppLink);
+      if(d.rsvpTelLabel) document.getElementById('dyn-rsvp-tel-label').textContent = d.rsvpTelLabel;
+    } catch(e) { console.error("Erro ao carregar dados customizados do admin:", e); }
+  }
+});
+
+/* ── CÉU ESTRELADO ── */
+const sky = document.getElementById('sky');
+const skx = sky.getContext('2d');
+let W, H, STARS = [];
+
+function resize() { W = sky.width = window.innerWidth; H = sky.height = window.innerHeight; }
+function initStars() {
+  STARS = [];
+  for (let i = 0; i < 350; i++) STARS.push({ x: Math.random(), y: Math.random(), r: .15 + Math.random() * .5, spd: .002 + Math.random() * .005, ph: Math.random() * Math.PI * 2, layer: 1 });
+  for (let i = 0; i < 100; i++) STARS.push({ x: Math.random(), y: Math.random(), r: .5 + Math.random() * .9, spd: .004 + Math.random() * .007, ph: Math.random() * Math.PI * 2, layer: 2 });
+  for (let i = 0; i < 28; i++) STARS.push({ x: Math.random(), y: Math.random(), r: .9 + Math.random() * 1.6, spd: .006 + Math.random() * .01, ph: Math.random() * Math.PI * 2, layer: 3 });
+}
+
+function drawSky() {
+  const grad = skx.createLinearGradient(0, 0, 0, H);
+  grad.addColorStop(0, '#010917'); grad.addColorStop(0.28, '#041223'); grad.addColorStop(0.6, '#061832'); grad.addColorStop(1, '#030e1c');
+  skx.fillStyle = grad; skx.fillRect(0, 0, W, H);
+
+  const n1 = skx.createRadialGradient(0, H * .3, 0, 0, H * .3, W * .5);
+  n1.addColorStop(0, 'rgba(20,50,120,.08)'); n1.addColorStop(.6, 'rgba(10,30,80,.04)'); n1.addColorStop(1, 'transparent');
+  skx.fillStyle = n1; skx.fillRect(0, 0, W, H);
+
+  const t = Date.now() * .001;
+  STARS.forEach(s => {
+    let a, r = s.r;
+    if (s.layer === 1) a = .1 + .5 * Math.abs(Math.sin(t * s.spd * 8 + s.ph));
+    else if (s.layer === 2) a = .25 + .6 * Math.abs(Math.sin(t * s.spd * 7 + s.ph));
+    else a = .45 + .55 * Math.abs(Math.sin(t * s.spd * 5 + s.ph));
+
+    const isGold = s.layer === 3 && s.ph > 4;
+    const col = isGold ? `rgba(245,218,130,${a})` : `rgba(210,225,255,${a})`;
+
+    skx.beginPath(); skx.arc(s.x * W, s.y * H, r, 0, Math.PI * 2);
+    skx.fillStyle = col; skx.fill();
+  });
+  requestAnimationFrame(drawSky);
+}
+resize(); initStars(); drawSky();
+window.addEventListener('resize', () => { resize(); initStars(); });
+
+function launchComet() {
+  const el = document.createElement('div'); el.className = 'comet';
+  const startX = Math.random() * W * .7; const startY = Math.random() * H * .4;
+  const len = 80 + Math.random() * 120; const dur = 500 + Math.random() * 400;
+  const angle = 20 + Math.random() * 30; const dist = 300 + Math.random() * 250;
+  el.style.left = startX + 'px'; el.style.top = startY + 'px'; el.style.setProperty('--len', len + 'px');
+  document.body.appendChild(el);
+  el.animate([
+    { transform: `translate(0,0) rotate(${angle}deg)`, opacity: 1 },
+    { transform: `translate(${dist}px,${dist*.42}px) rotate(${angle}deg)`, opacity: 0 }
+  ], { duration: dur, easing: 'ease-out', fill: 'forwards' }).onfinish = () => el.remove();
+}
+setInterval(launchComet, 2600);
+
+function goldPx() {
+  const el = document.createElement('div'); el.className = 'gpx'; const sz = .8 + Math.random() * 2.5;
+  el.style.cssText = `width:${sz}px;height:${sz}px; background:${Math.random()>.5?'rgba(245,215,110,.7)':'rgba(255,255,255,.5)'}; left:${Math.random() * 100}vw; animation-duration:${16 + Math.random() * 20}s; animation-delay:${Math.random() * 10}s;`;
+  document.body.appendChild(el); setTimeout(() => el.remove(), 36000);
+}
+for (let i = 0; i < 14; i++) setTimeout(goldPx, i * 500);
+setInterval(goldPx, 3200);
+
+const io = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }); }, { threshold: .1 });
+document.querySelectorAll('.rev, .rev-scale').forEach(el => io.observe(el));
+
+/* ── MÚSICA DE FUNDO ── */
+const music = document.getElementById('bg-music');
+const musicCtrl = document.getElementById('music-ctrl');
+const musicIcon = document.getElementById('music-icon');
+let playing = false;
+
+fetch('viva-la-vida-instrumental.mp3', {method: 'HEAD'}).then(r => { if (r.ok) { music.innerHTML = '<source src="viva-la-vida-instrumental.mp3" type="audio/mpeg">'; music.load(); } }).catch(() => {});
+musicCtrl.addEventListener('click', () => {
+  if (playing) {
+    music.pause(); musicCtrl.classList.remove('playing');
+    musicIcon.innerHTML = '<path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>';
+  } else {
+    music.play().catch(e => console.log('Autoplay bloqueado:', e)); musicCtrl.classList.add('playing');
+    musicIcon.innerHTML = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>';
+  }
+  playing = !playing;
+});
+setTimeout(() => { music.play().then(() => { playing = true; musicCtrl.classList.add('playing'); musicIcon.innerHTML = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>'; }).catch(() => {}); }, 1000);
+</script>
+</body>
+</html>
