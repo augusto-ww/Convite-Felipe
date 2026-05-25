@@ -20,7 +20,7 @@
   }
   * { margin:0; padding:0; box-sizing:border-box; }
   body { background:#061428; color:var(--cream); font-family:'Cormorant Garamond',serif; min-height:100vh; }
- 
+
   /* LOGIN */
   #login-screen {
     min-height:100vh;
@@ -54,10 +54,10 @@
   }
   .login-btn:hover { background:rgba(201,168,76,0.1); }
   .login-error { color:#f09090; font-size:0.85rem; font-style:italic; }
- 
+
   /* PAINEL */
   #admin-panel { display:none; padding:2rem; max-width:1100px; margin:0 auto; }
- 
+
   /* HEADER */
   .admin-header {
     display:flex; align-items:center; justify-content:space-between;
@@ -72,7 +72,7 @@
     text-transform:uppercase; transition:color 0.2s;
   }
   .logout-btn:hover { color:var(--gold); }
- 
+
   /* STATS */
   .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:1rem; margin-bottom:2.5rem; }
   .stat-card {
@@ -81,29 +81,30 @@
   }
   .stat-number { font-size:2.5rem; font-weight:300; color:var(--gold-light); line-height:1; }
   .stat-label { font-family:'Cinzel',serif; font-size:0.55rem; letter-spacing:0.4em; color:var(--gold); text-transform:uppercase; margin-top:0.5rem; display:block; }
- 
+
   /* ABAS */
+  .tab-container { display:flex; gap:1rem; margin-bottom:2rem; border-bottom:1px solid rgba(201,168,76,.1); }
   .tab-btn {
-    background:none; border:none; padding:0.7rem 1.2rem; color:rgba(201,168,76,0.4);
+    background:none; border:none; padding:0.8rem 1.5rem; color:rgba(201,168,76,0.4);
     font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.2em; cursor:pointer;
     text-transform:uppercase; transition:all 0.3s; border-bottom:2px solid transparent;
-    margin-bottom:-1px;
   }
   .tab-btn:hover { color:var(--gold-light); }
   .tab-btn.active { color:var(--gold-light); border-bottom:2px solid var(--gold); }
 
-  /* FORMULÁRIO DE TEXTOS */
-  .form-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:1.5rem; margin-top:1rem; }
-  .form-group { display:flex; flex-direction:column; gap:0.5rem; margin-bottom:1rem; }
-  .form-group.full-width { grid-column: 1 / -1; }
-  .form-group label { font-family:'Cinzel',serif; font-size:0.6rem; letter-spacing:0.2em; color:var(--gold); text-transform:uppercase; }
+  /* EDITOR DE TEXTOS FORM */
+  .editor-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:1.5rem; }
+  .editor-section { border:1px solid rgba(201,168,76,0.15); padding:1.5rem; background:rgba(255,255,255,0.01); }
+  .editor-section h3 { font-family:'Cinzel',serif; font-size:0.75rem; letter-spacing:0.2em; color:var(--gold-light); margin-bottom:1.2rem; text-transform:uppercase; border-bottom:1px solid rgba(201,168,76,0.1); padding-bottom:0.4rem; }
+  .form-group { display:flex; flex-direction:column; gap:0.4rem; margin-bottom:1rem; }
+  .form-group label { font-family:'Cinzel',serif; font-size:0.55rem; letter-spacing:0.15em; color:var(--gold); text-transform:uppercase; }
   .form-input, .form-textarea {
-    width:100%; background:rgba(255,255,255,0.03); border:1px solid rgba(201,168,76,0.2);
-    padding:0.8rem; color:var(--cream); font-family:'Cormorant Garamond',serif; font-size:1.05rem;
-    outline:none; transition:border 0.3s;
+    width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(201,168,76,0.2);
+    padding:0.7rem 0.9rem; color:var(--cream); font-family:'Cormorant Garamond',serif; font-size:1rem; outline:none;
   }
-  .form-input:focus, .form-textarea:focus { border-color:var(--gold); }
-  .form-textarea { resize:vertical; min-height:90px; }
+  .form-input:focus, .form-textarea:focus { border-color:var(--gold-light); }
+  .form-textarea { resize:vertical; min-height:80px; }
+  .save-bar { margin-top:2rem; padding-top:1.5rem; border-top:1px solid rgba(201,168,76,0.1); text-align:right; }
 
   /* TOOLBAR */
   .toolbar { display:flex; gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap; align-items:center; }
@@ -119,7 +120,7 @@
   }
   .toolbar-btn:hover { border-color:var(--gold); color:var(--gold); }
   .toolbar-btn.danger:hover { border-color:var(--error); color:#f09090; }
- 
+
   /* TABELA */
   .table-wrap { overflow-x:auto; }
   table { width:100%; border-collapse:collapse; }
@@ -141,7 +142,7 @@
     font-family:'Cinzel',serif; letter-spacing:0.1em;
   }
   .badge-confirmed { background:rgba(74,154,106,0.15); color:#6dd8a0; border:1px solid rgba(74,154,106,0.3); }
- 
+
   /* EXPANDIR MEMBROS */
   .members-toggle {
     background:none; border:none; color:var(--gold-pale); cursor:pointer;
@@ -149,7 +150,7 @@
     text-decoration:underline; padding:0; transition:color 0.2s;
   }
   .members-toggle:hover { color:var(--gold-light); }
- 
+
   .members-detail { display:none; margin-top:0.5rem; }
   .members-detail.open { display:block; }
   .member-row {
@@ -160,10 +161,10 @@
   .member-row:last-child { border-bottom:none; }
   .member-name { color:var(--cream); flex:1; }
   .member-birth { color:var(--gold); font-size:0.8rem; }
- 
+
   /* EMPTY */
   .empty-state { text-align:center; padding:4rem 2rem; color:rgba(201,168,76,0.4); font-style:italic; }
- 
+
   /* PENDING LIST */
   .pending-section { margin-top:2.5rem; }
   .pending-title {
@@ -176,7 +177,7 @@
     background:rgba(85,128,201,0.05); color:rgba(180,200,255,0.7);
     font-size:0.8rem; font-family:'Cinzel',serif; letter-spacing:0.1em;
   }
- 
+
   /* RESET BTN */
   .reset-section {
     margin-top:3rem; padding-top:2rem;
@@ -184,7 +185,7 @@
     display:flex; gap:1rem; align-items:center; flex-wrap:wrap;
   }
   .reset-desc { font-size:0.9rem; font-style:italic; color:rgba(201,168,76,0.4); flex:1; }
- 
+
   /* EXPORT */
   .export-btn {
     padding:0.7rem 1.5rem; background:transparent;
@@ -193,25 +194,25 @@
     text-transform:uppercase; cursor:pointer; transition:all 0.2s;
   }
   .export-btn:hover { background:rgba(74,154,106,0.1); }
- 
+
   @media(max-width:600px) { #admin-panel { padding:1rem; } th,td { padding:0.7rem 0.5rem; } }
 </style>
 </head>
 <body>
- 
+
 <div id="login-screen">
   <div class="login-box">
     <p style="font-size:2rem;margin-bottom:1rem">🔐</p>
     <h1 class="login-title">Painel Administrativo</h1>
     <p class="login-sub">O Pequeno Príncipe · Gerenciamento de Convidados</p>
-    <input type="password" id="admin-pass" class="login-input" placeholder="••••••••">
+    <input type="password" id="admin-pass" class="login-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()">
     <button class="login-btn" onclick="login()">Entrar</button>
     <p class="login-error" id="login-error" style="margin-top:0.8rem;display:none"></p>
   </div>
 </div>
- 
+
 <div id="admin-panel">
- 
+
   <div class="admin-header">
     <div>
       <h1 class="admin-title">Painel de <em>Confirmações</em></h1>
@@ -221,7 +222,7 @@
     </div>
     <button class="logout-btn" onclick="logout()">Sair ×</button>
   </div>
- 
+
   <div class="stats-grid" id="stats-grid">
     <div class="stat-card">
       <div class="stat-number" id="stat-confirmed">0</div>
@@ -240,19 +241,19 @@
       <span class="stat-label">Total de Membros</span>
     </div>
   </div>
- 
-  <div style="display:flex;gap:1rem;margin-bottom:2rem;border-bottom:1px solid rgba(201,168,76,.1);">
-    <button class="tab-btn active" onclick="showTab('confirmacoes')" id="tab-conf">Confirmações</button>
-    <button class="tab-btn" onclick="showTab('textos')" id="tab-txt">Editar Textos do Convite</button>
+
+  <div class="tab-container">
+    <button class="tab-btn active" id="tab-btn-rsvp" onclick="switchTab('rsvp')">Confirmações</button>
+    <button class="tab-btn" id="tab-btn-texts" onclick="switchTab('texts')">Editar Textos do Convite</button>
   </div>
- 
-  <div id="aba-confirmacoes">
+
+  <div id="tab-content-rsvp">
     <div class="toolbar">
       <input type="text" class="toolbar-search" id="search-input" placeholder="Buscar por família ou código..." oninput="renderTable()">
       <button class="toolbar-btn export-btn" onclick="exportCSV()">⬇ Exportar CSV</button>
       <button class="toolbar-btn" onclick="renderAll()">↻ Atualizar</button>
     </div>
-   
+
     <div class="table-wrap">
       <table>
         <thead>
@@ -273,12 +274,12 @@
         Nenhuma confirmação ainda. As estrelas aguardam...
       </div>
     </div>
-   
+
     <div class="pending-section">
       <span class="pending-title">Famílias que ainda não confirmaram</span>
       <div class="pending-grid" id="pending-grid"></div>
     </div>
-   
+
     <div class="reset-section">
       <p class="reset-desc">
         ⚠️ Área de risco: remover uma confirmação libera o código para nova confirmação.
@@ -289,50 +290,132 @@
     </div>
   </div>
 
-  <div id="aba-textos" style="display:none;">
-    <div class="form-grid">
-      <div class="form-group">
-        <label for="input-nome">Nome do Aniversariante</label>
-        <input type="text" id="input-nome" class="form-input" placeholder="Ex: Felipe">
+  <div id="tab-content-texts" style="display: none;">
+    <div class="editor-grid">
+      
+      <div class="editor-section">
+        <h3>Cena 1 — Abertura</h3>
+        <div class="form-group">
+          <label>Narrativa Linha 1</label>
+          <input type="text" id="txt-narr1" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Narrativa Linha 2</label>
+          <input type="text" id="txt-narr2" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Subtítulo do Convite</label>
+          <input type="text" id="txt-invite-sub" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Nome do Aniversariante</label>
+          <input type="text" id="txt-name" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Texto da Faixa / Idade</label>
+          <input type="text" id="txt-aninho" class="form-input">
+        </div>
       </div>
-      <div class="form-group">
-        <label for="input-idade">Idade / Subtítulo</label>
-        <input type="text" id="input-idade" class="form-input" placeholder="Ex: 1º Aniversário">
+
+      <div class="editor-section">
+        <h3>Cena 2 e 3 — Elementos Temáticos</h3>
+        <div class="form-group">
+          <label>Subtítulo do Planeta (Cena 2)</label>
+          <input type="text" id="txt-planet-sub" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Legenda do Planeta (Cena 2)</label>
+          <input type="text" id="txt-planet-label" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Citação / Frase (Cena 3)</label>
+          <textarea id="txt-quote-body" class="form-textarea"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Autor da Citação (Cena 3)</label>
+          <input type="text" id="txt-quote-author" class="form-input">
+        </div>
       </div>
-      <div class="form-group">
-        <label for="input-data">Data da Festa</label>
-        <input type="text" id="input-data" class="form-input" placeholder="Ex: Sábado, 18 de Outubro de 2025">
+
+      <div class="editor-section">
+        <h3>Cena 4 — Informações da Festa</h3>
+        <div class="form-group">
+          <label>Data por Extenso</label>
+          <input type="text" id="txt-event-date" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Horário</label>
+          <input type="text" id="txt-event-time" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Endereço / Localização</label>
+          <textarea id="txt-event-location" class="form-textarea"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Link do Google Maps (URL do Botão)</label>
+          <input type="text" id="txt-event-maps" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Tipo de Traje</label>
+          <input type="text" id="txt-event-traje" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Prazo Limite de Confirmação</label>
+          <input type="text" id="txt-event-deadline" class="form-input">
+        </div>
       </div>
-      <div class="form-group">
-        <label for="input-horario">Horário</label>
-        <input type="text" id="input-horaway" class="form-input" id="input-horario" placeholder="Ex: Às 16:00h">
+
+      <div class="editor-section">
+        <h3>Cenas 5 e 6 — Mensagem final & RSVP</h3>
+        <div class="form-group">
+          <label>Título da Mensagem (Cena 5)</label>
+          <textarea id="txt-msg-title" class="form-textarea"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Parágrafo 1 da Mensagem</label>
+          <textarea id="txt-msg-p1" class="form-textarea"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Parágrafo 2 da Mensagem</label>
+          <textarea id="txt-msg-p2" class="form-textarea"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Assinatura de Fechamento</label>
+          <input type="text" id="txt-msg-sign" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Título do Bloco RSVP (Cena 6)</label>
+          <input type="text" id="txt-rsvp-title" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Texto descritivo do RSVP</label>
+          <textarea id="txt-rsvp-sub" class="form-textarea"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Link da API do WhatsApp (wa.me)</label>
+          <input type="text" id="txt-rsvp-wpp-link" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Telefone para exibição física</label>
+          <input type="text" id="txt-rsvp-tel-label" class="form-input">
+        </div>
       </div>
-      <div class="form-group full-width">
-        <label for="input-local">Local / Endereço Completo</label>
-        <input type="text" id="input-local" class="form-input" placeholder="Ex: Buffet Estrela Azul - Rua das Nações, 123">
-      </div>
-      <div class="form-group full-width">
-        <label for="input-maps">Link do Google Maps (Botão de Localização)</label>
-        <input type="text" id="input-maps" class="form-input" placeholder="Ex: https://maps.google.com/...">
-      </div>
-      <div class="form-group full-width">
-        <label for="input-frase">Frase de Introdução (O Pequeno Príncipe)</label>
-        <textarea id="input-frase" class="form-textarea" placeholder="Ex: 'O essencial é invisível aos olhos...'"></textarea>
-      </div>
+
     </div>
-    <div style="margin-top:2rem; text-align:right;">
-      <button class="toolbar-btn" onclick="savePartyDetails()" style="border-color:var(--gold); color:var(--gold-light); padding:1rem 2rem;">
-        ✨ Salvar Informações da Festa
+
+    <div class="save-bar">
+      <button class="toolbar-btn" style="border-color: var(--gold); color: var(--gold-light); padding: 0.9rem 2.5rem;" onclick="saveTexts()">
+        ✨ Salvar Todos os Textos
       </button>
     </div>
   </div>
- 
+
 </div>
- 
+
 <script>
 // ── CONFIG ──
-const ADMIN_PASSWORD = 'felipe2025'; // 🔑 Altere esta senha!
- 
+const ADMIN_PASSWORD = 'felipe2025';
+
 const FAMILY_CODES = {
   'FELIPE-FAM01': 'Família 01',
   'FELIPE-FAM02': 'Família 02',
@@ -346,7 +429,7 @@ const FAMILY_CODES = {
   'FELIPE-FAM10': 'Família 10',
   'TESTE-FELIPE': 'Família Teste',
 };
- 
+
 // ── AUTH ──
 function login() {
   const pass = document.getElementById('admin-pass').value;
@@ -355,91 +438,193 @@ function login() {
     document.getElementById('admin-panel').style.display = 'block';
     sessionStorage.setItem('admin_auth', '1');
     renderAll();
-    loadPartyDetails();
+    loadTexts();
   } else {
     const err = document.getElementById('login-error');
     err.textContent = 'Senha incorreta.';
     err.style.display = 'block';
   }
 }
- 
+
 function logout() {
   sessionStorage.removeItem('admin_auth');
   location.reload();
 }
- 
-// Auto-login se sessão ativa
+
 if (sessionStorage.getItem('admin_auth') === '1') {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('admin-panel').style.display = 'block';
   setTimeout(() => {
     renderAll();
-    loadPartyDetails();
+    loadTexts();
   }, 100);
 }
- 
-// ── DADOS ──
+
+// ── CONTROLE DE ABAS ──
+function switchTab(tab) {
+  const btnRsvp = document.getElementById('tab-btn-rsvp');
+  const btnTexts = document.getElementById('tab-btn-texts');
+  const contentRsvp = document.getElementById('tab-content-rsvp');
+  const contentTexts = document.getElementById('tab-content-texts');
+
+  if(tab === 'rsvp') {
+    btnRsvp.classList.add('active');
+    btnTexts.classList.remove('active');
+    contentRsvp.style.display = 'block';
+    contentTexts.style.display = 'none';
+  } else {
+    btnTexts.classList.add('active');
+    btnRsvp.classList.remove('active');
+    contentTexts.style.display = 'block';
+    contentRsvp.style.display = 'none';
+  }
+}
+
+// ── SISTEMA DE SALVAMENTO DE TEXTOS DINÂMICOS ──
+function saveTexts() {
+  const settings = {
+    narr1: document.getElementById('txt-narr1').value,
+    narr2: document.getElementById('txt-narr2').value,
+    inviteSub: document.getElementById('txt-invite-sub').value,
+    name: document.getElementById('txt-name').value,
+    aninho: document.getElementById('txt-aninho').value,
+    planetSub: document.getElementById('txt-planet-sub').value,
+    planetLabel: document.getElementById('txt-planet-label').value,
+    quoteBody: document.getElementById('txt-quote-body').value,
+    quoteAuthor: document.getElementById('txt-quote-author').value,
+    eventDate: document.getElementById('txt-event-date').value,
+    eventTime: document.getElementById('txt-event-time').value,
+    eventLocation: document.getElementById('txt-event-location').value,
+    eventMaps: document.getElementById('txt-event-maps').value,
+    eventTraje: document.getElementById('txt-event-traje').value,
+    eventDeadline: document.getElementById('txt-event-deadline').value,
+    msgTitle: document.getElementById('txt-msg-title').value,
+    msgP1: document.getElementById('txt-msg-p1').value,
+    msgP2: document.getElementById('txt-msg-p2').value,
+    msgSign: document.getElementById('txt-msg-sign').value,
+    rsvpTitle: document.getElementById('txt-rsvp-title').value,
+    rsvpSub: document.getElementById('txt-rsvp-sub').value,
+    rsvpWppLink: document.getElementById('txt-rsvp-wpp-link').value,
+    rsvpTelLabel: document.getElementById('txt-rsvp-tel-label').value,
+  };
+
+  localStorage.setItem('felipe_party_details', JSON.stringify(settings));
+  alert('✨ Todos os textos e informações da festa foram guardados e aplicados no convite!');
+}
+
+function loadTexts() {
+  const data = localStorage.getItem('felipe_party_details');
+  
+  // Valores default idênticos aos seus originais do HTML para preenchimento automático inicial
+  const d = data ? JSON.parse(data) : {
+    narr1: 'Em um pequeno planeta,',
+    narr2: 'nasceu um príncipe muito especial...',
+    inviteSub: 'Você está cordialmente convidado para o 1º aniversário do',
+    name: 'Felipe',
+    aninho: '✦   1 Aninho   ✦',
+    planetSub: 'E o amor cresceu como as estrelas no céu...',
+    planetLabel: 'Venha celebrar este momento mágico',
+    quoteBody: 'Todas as pessoas grandes foram um dia crianças —\nmas poucas se lembram disso.',
+    quoteAuthor: 'Antoine de Saint-Exupéry  ·  O Pequeno Príncipe',
+    eventDate: '18 de Julho\nde 2025',
+    eventTime: 'Das 13h30\nàs 17h30',
+    eventLocation: 'Rua Paraná, 225  ·  Vila Irene\nSão Roque – SP',
+    eventMaps: 'https://maps.google.com/?q=Rua+Paraná+225+Vila+Irene+São+Roque+SP',
+    eventTraje: 'Social\nElegante',
+    eventDeadline: '10 de Julho\nde 2025',
+    msgTitle: 'Sua presença tornará\neste dia ainda mais especial',
+    msgP1: 'Venha viver conosco uma tarde repleta de amor,\nsonhos e momentos que ficarão para sempre\ngravados em nossas memórias e em nossos corações.',
+    msgP2: 'Como o Pequeno Príncipe que cuidava da sua rosa única,\ncada convidado é precioso e insubstituível para nós.',
+    msgSign: 'Esperamos por você!',
+    rsvpTitle: 'Confirme sua\npresença',
+    rsvpSub: 'Para que possamos preparar tudo com carinho\npara cada família, pedimos sua confirmação.',
+    rsvpWppLink: 'https://wa.me/5515996774272?text=Olá!%20Confirmo%20minha%20presença%20no%201º%20aniversário%20do%20Felipe%20👑',
+    rsvpTelLabel: '(15) 99677-4272'
+  };
+
+  document.getElementById('txt-narr1').value = d.narr1;
+  document.getElementById('txt-narr2').value = d.narr2;
+  document.getElementById('txt-invite-sub').value = d.inviteSub;
+  document.getElementById('txt-name').value = d.name;
+  document.getElementById('txt-aninho').value = d.aninho;
+  document.getElementById('txt-planet-sub').value = d.planetSub;
+  document.getElementById('txt-planet-label').value = d.planetLabel;
+  document.getElementById('txt-quote-body').value = d.quoteBody;
+  document.getElementById('txt-quote-author').value = d.quoteAuthor;
+  document.getElementById('txt-event-date').value = d.eventDate;
+  document.getElementById('txt-event-time').value = d.eventTime;
+  document.getElementById('txt-event-location').value = d.eventLocation;
+  document.getElementById('txt-event-maps').value = d.eventMaps;
+  document.getElementById('txt-event-traje').value = d.eventTraje;
+  document.getElementById('txt-event-deadline').value = d.eventDeadline;
+  document.getElementById('txt-msg-title').value = d.msgTitle;
+  document.getElementById('txt-msg-p1').value = d.msgP1;
+  document.getElementById('txt-msg-p2').value = d.msgP2;
+  document.getElementById('txt-msg-sign').value = d.msgSign;
+  document.getElementById('txt-rsvp-title').value = d.rsvpTitle;
+  document.getElementById('txt-rsvp-sub').value = d.rsvpSub;
+  document.getElementById('txt-rsvp-wpp-link').value = d.rsvpWppLink;
+  document.getElementById('txt-rsvp-tel-label').value = d.rsvpTelLabel;
+}
+
+// ── DADOS DO RSVP ──
 function getConfirmed() {
   try { return JSON.parse(localStorage.getItem('rsvp_confirmed') || '{}'); }
   catch { return {}; }
 }
- 
+
 function renderAll() {
   updateStats();
   renderTable();
   renderPending();
 }
- 
+
 function updateStats() {
   const confirmed = getConfirmed();
   const codes = Object.keys(confirmed);
   const totalFamilies = Object.keys(FAMILY_CODES).length;
   const totalMembers = codes.reduce((sum, c) => sum + (confirmed[c].members?.length || 0), 0);
- 
+
   document.getElementById('stat-confirmed').textContent = codes.length;
   document.getElementById('stat-pending').textContent = totalFamilies - codes.length;
   document.getElementById('stat-total').textContent = totalFamilies;
   document.getElementById('stat-members').textContent = totalMembers;
 }
- 
+
 function renderTable() {
   const confirmed = getConfirmed();
   const search = document.getElementById('search-input').value.toLowerCase();
   const tbody = document.getElementById('rsvp-table-body');
   const emptyState = document.getElementById('empty-state');
- 
+
   const entries = Object.entries(confirmed).filter(([code, data]) => {
     if (!search) return true;
-    return code.toLowerCase().includes(search) ||
-           (data.familyName || '').toLowerCase().includes(search);
+    return code.toLowerCase().includes(search) || (data.familyName || '').toLowerCase().includes(search);
   });
- 
+
   tbody.innerHTML = '';
- 
+
   if (entries.length === 0) {
     emptyState.style.display = 'block';
     return;
   }
   emptyState.style.display = 'none';
- 
+
   entries.sort((a, b) => new Date(b[1].confirmedAt) - new Date(a[1].confirmedAt));
- 
+
   entries.forEach(([code, data]) => {
     const date = new Date(data.confirmedAt);
-    const dateStr = date.toLocaleDateString('pt-BR', {
-      day:'2-digit', month:'2-digit', year:'numeric',
-      hour:'2-digit', minute:'2-digit'
-    });
- 
+    const dateStr = date.toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+
     const membersHtml = (data.members || []).map(m => `
       <div class="member-row">
         <span class="member-name">${m.nome}</span>
         <span class="member-birth">${m.nascimento || '—'}</span>
       </div>
     `).join('');
- 
+
     const rowId = `members-${code.replace(/[^a-z0-9]/gi,'_')}`;
- 
+
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td class="td-code">${code}</td>
@@ -447,39 +632,29 @@ function renderTable() {
       <td class="td-date">${dateStr}</td>
       <td class="td-count"><span class="badge badge-confirmed">${data.members?.length || 0}</span></td>
       <td>
-        <button class="members-toggle" onclick="toggleMembers('${rowId}')">
-          Ver membros
-        </button>
+        <button class="members-toggle" onclick="toggleMembers('${rowId}')">Ver membros</button>
         <div class="members-detail" id="${rowId}">${membersHtml}</div>
       </td>
-      <td style="font-size:0.9rem;color:rgba(201,168,76,0.6);font-style:italic">
-        ${data.obs || '—'}
-      </td>
+      <td style="font-size:0.9rem;color:rgba(201,168,76,0.6);font-style:italic">${data.obs || '—'}</td>
       <td>
-        <button class="toolbar-btn danger" onclick="removeEntry('${code}')"
-          style="border-color:rgba(224,85,85,0.2);color:rgba(224,85,85,0.5);padding:0.3rem 0.7rem;font-size:0.55rem">
-          Remover
-        </button>
+        <button class="toolbar-btn danger" onclick="removeEntry('${code}')" style="border-color:rgba(224,85,85,0.2);color:rgba(224,85,85,0.5);padding:0.3rem 0.7rem;font-size:0.55rem">Remover</button>
       </td>
     `;
     tbody.appendChild(tr);
   });
 }
- 
+
 function toggleMembers(id) {
-  const el = document.getElementById(id);
-  el.classList.toggle('open');
+  document.getElementById(id).classList.toggle('open');
 }
- 
+
 function renderPending() {
   const confirmed = getConfirmed();
   const grid = document.getElementById('pending-grid');
   const pending = Object.entries(FAMILY_CODES).filter(([code]) => !confirmed[code]);
-  grid.innerHTML = pending.map(([code, name]) =>
-    `<div class="pending-chip">${name}</div>`
-  ).join('') || '<p style="color:rgba(201,168,76,0.4);font-style:italic;font-size:0.9rem">Todas as famílias confirmaram! 🎉</p>';
+  grid.innerHTML = pending.map(([code, name]) => `<div class="pending-chip">${name}</div>`).join('') || '<p style="color:rgba(201,168,76,0.4);font-style:italic;font-size:0.9rem">Todas as famílias confirmaram! 🎉</p>';
 }
- 
+
 function removeEntry(code) {
   if (!confirm(`Remover confirmação de ${FAMILY_CODES[code] || code}? O código poderá ser usado novamente.`)) return;
   const confirmed = getConfirmed();
@@ -487,89 +662,33 @@ function removeEntry(code) {
   localStorage.setItem('rsvp_confirmed', JSON.stringify(confirmed));
   renderAll();
 }
- 
+
 function clearAll() {
   if (!confirm('⚠️ Remover TODAS as confirmações? Esta ação não pode ser desfeita.')) return;
   if (!confirm('Tem certeza absoluta? Todos os dados serão perdidos.')) return;
   localStorage.removeItem('rsvp_confirmed');
   renderAll();
 }
- 
+
 function exportCSV() {
   const confirmed = getConfirmed();
   const rows = [['Código', 'Família', 'Confirmado em', 'Nº Membros', 'Nomes', 'Datas de Nascimento', 'Observações']];
- 
+
   Object.entries(confirmed).forEach(([code, data]) => {
     const date = new Date(data.confirmedAt).toLocaleString('pt-BR');
     const nomes = (data.members || []).map(m => m.nome).join(' | ');
     const nascimentos = (data.members || []).map(m => m.nascimento || '').join(' | ');
     rows.push([code, data.familyName || '', date, data.members?.length || 0, nomes, nascimentos, data.obs || '']);
   });
- 
+
   const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
   const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url;
-  a.download = `rsvp_pequeno_principe_${new Date().toISOString().split('T')[0]}.csv`;
-  a.click();
-  URL.revokeObjectURL(url);
+  a.href = url; a.download = `rsvp_pequeno_principe_${new Date().toISOString().split('T')[0]}.csv`;
+  a.click(); URL.revokeObjectURL(url);
 }
 
-// ── SISTEMA DE ABAS ──
-function showTab(tabName) {
-  const tabConf = document.getElementById('tab-conf');
-  const tabTxt = document.getElementById('tab-txt');
-  const abaConf = document.getElementById('aba-confirmacoes');
-  const abaTxt = document.getElementById('aba-textos');
-
-  if (tabName === 'confirmacoes') {
-    tabConf.classList.add('active');
-    tabTxt.classList.remove('active');
-    abaConf.style.display = 'block';
-    abaTxt.style.display = 'none';
-  } else {
-    tabTxt.classList.add('active');
-    tabConf.classList.remove('active');
-    abaTxt.style.display = 'block';
-    abaConf.style.display = 'none';
-  }
-}
-
-// ── MANIPULAÇÃO DOS TEXTOS DA FESTA ──
-function savePartyDetails() {
-  const details = {
-    nome: document.getElementById('input-nome').value,
-    idade: document.getElementById('input-idade').value,
-    data: document.getElementById('input-data').value,
-    horario: document.querySelector('[placeholder="Ex: Às 16:00h"]').value, // Correção do seletor flexível
-    local: document.getElementById('input-local').value,
-    maps: document.getElementById('input-maps').value,
-    frase: document.getElementById('input-frase').value,
-  };
-
-  localStorage.setItem('felipe_party_details', JSON.stringify(details));
-  alert('✨ Detalhes da festa salvos com sucesso!');
-}
-
-function loadPartyDetails() {
-  const saved = localStorage.getItem('felipe_party_details');
-  if (!saved) return;
-
-  try {
-    const details = JSON.parse(saved);
-    document.getElementById('input-nome').value = details.nome || '';
-    document.getElementById('input-idade').value = details.idade || '';
-    document.getElementById('input-data').value = details.data || '';
-    document.querySelector('[placeholder="Ex: Às 16:00h"]').value = details.horario || '';
-    document.getElementById('input-local').value = details.local || '';
-    document.getElementById('input-maps').value = details.maps || '';
-    document.getElementById('input-frase').value = details.frase || '';
-  } catch (e) {
-    console.error('Erro ao carregar os dados da festa', e);
-  }
-}
- 
 document.getElementById('admin-pass').addEventListener('keydown', e => {
   if (e.key === 'Enter') login();
 });
