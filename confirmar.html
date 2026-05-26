@@ -221,7 +221,7 @@
 
   /* ── MEMBROS ── */
   .members-list { display: flex; flex-direction: column; gap: 1.2rem; margin-bottom: 1.5rem; }
-  .member-card { border: 1px solid rgba(201,168,76,0.15); padding: 1.5rem; background: rgba(201,168,76,0.02); position: relative; animation: fadeUp 0.4s ease; }
+  .member-card { border: 1px solid rgba(201,168,76,0.15); padding: 1.5rem; background: rgba(201,168,76,0.02); position: relative; animation: fadeUp 0.4s ease; transition: opacity 0.3s; }
   .member-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
   .member-number { font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.3em; color: var(--gold); text-transform: uppercase; }
   .member-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
@@ -257,7 +257,7 @@
   .success-text { font-size: 1.05rem; color: var(--gold-pale); line-height: 1.9; margin-bottom: 1.5rem; opacity: 0.85; }
   .success-names { border: 1px solid rgba(201,168,76,0.2); padding: 1.5rem; margin: 1.5rem 0; background: rgba(201,168,76,0.03); }
   .success-names-title { font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.4em; color: var(--gold); text-transform: uppercase; display: block; margin-bottom: 1rem; }
-  .success-name-item { font-size: 1rem; color: var(--cream); padding: 0.4rem 0; border-bottom: 1px solid rgba(201,168,76,0.1); display: flex; justify-content: space-between; }
+  .success-name-item { font-size: 1rem; color: var(--cream); padding: 0.4rem 0; border-bottom: 1px solid rgba(201,168,76,0.1); display: flex; justify-content: space-between; align-items: center; }
   .success-name-item:last-child { border-bottom: none; }
   .success-quote { font-style: italic; color: var(--gold-pale); font-size: 1rem; line-height: 1.7; opacity: 0.7; margin-top: 2rem; }
 
@@ -343,7 +343,8 @@
     <div class="success-screen" id="success-screen">
       <span class="success-icon">🌟</span>
       <h2 class="success-title">Presença Confirmada!</h2>
-      <div class="success-names" id="success-names-box"></div>
+      <p class="success-text">Contamos com sua presença para tornar este momento ainda mais especial.</p>
+      <div id="success-names-box"></div>
     </div>
   </div>
 
@@ -358,7 +359,7 @@
 import { db } from './firebase.js';
 import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
-let currentStep = 1; let verifiedCode = null; let verifiedFamilyName = null; let memberCount = 0;
+let currentStep = 1; let verifiedCode = null; let verifiedFamilyName = null;
 
 function showStatus(id, msg, type) {
   const el = document.getElementById(id);
@@ -404,36 +405,64 @@ function showBlockedScreen(familyName, dateStr, members) {
   const card = document.getElementById('main-card');
   if (document.getElementById('steps-indicator')) document.getElementById('steps-indicator').style.display = 'none';
   document.querySelectorAll('.form-step').forEach(s => s.style.display = 'none');
-  const memberList = members ? members.map(m => `<li style="padding:0.3rem 0;font-size:0.95rem;">${m.nome}</li>`).join('') : '';
+  const memberList = members ? members.map(m => `
+    <li style="padding:0.4rem 0; font-size:0.95rem; display: flex; justify-content: space-between; border-bottom: 1px solid rgba(201,168,76,0.1);">
+      <span>${m.nome}</span>
+      <span style="color:${m.comparecera ? '#4a9a6a' : '#e05555'}">${m.comparecera ? 'Confirmado' : 'Não comparecerá'}</span>
+    </li>`).join('') : '';
   const blocked = document.createElement('div');
   blocked.className = 'blocked-msg';
   blocked.innerHTML = `
     <span class="blocked-icon">🔒</span><h2 class="blocked-title">Presença já confirmada</h2>
-    <p class="blocked-text">A <strong>${familyName}</strong> já confirmou presença em ${dateStr}.</p>
-    <ul style="list-style:none;padding:1rem 0;">${memberList}</ul>
-    <a href="index.html" style="color:var(--gold); font-size:0.7rem; text-decoration:none;">← Voltar ao convite</a>`;
+    <p class="blocked-text">A <strong>${familyName}</strong> já enviou a confirmação em ${dateStr}.</p>
+    <ul style="list-style:none; padding:1rem 0; max-width: 320px; margin: 0 auto; text-align: left;">${memberList}</ul>
+    <a href="index.html" style="color:var(--gold); font-size:0.7rem; text-decoration:none; margin-top: 1rem; display: inline-block;">← Voltar ao convite</a>`;
   card.appendChild(blocked);
 }
 
-function addReadOnlyMember(nomeCompleto, index) {
+function addMemberCard(nomeCompleto, index) {
   const list = document.getElementById('members-list');
   const card = document.createElement('div');
   card.className = 'member-card';
   card.innerHTML = `
-    <div class="member-card-header"><span class="member-number">Membro ${index}</span></div>
+    <div class="member-card-header">
+      <span class="member-number">Membro ${index}</span>
+    </div>
     <div class="member-grid">
       <div class="field">
-        <label>Nome Completo</label>
-        <input type="text" class="member-nome" value="${nomeCompleto}" readonly style="background:rgba(255,255,255,0.02); border-color:rgba(201,168,76,0.1); color:rgba(255,255,255,0.6); cursor:not-allowed;">
+        <label>Nome Completo *</label>
+        <input type="text" class="member-nome" placeholder="Digite o nome completo" value="${nomeCompleto === "Convidado Principal" ? "" : nomeCompleto}">
+        <div class="field-error err-nome">Por favor, preencha o nome completo (Nome e Sobrenome).</div>
       </div>
       <div class="field">
         <label>Data de Nascimento *</label>
         <input type="date" class="member-nasc">
-        <div class="field-error err-nasc"></div>
+        <div class="field-error err-nasc">Por favor, insira a data de nascimento.</div>
       </div>
+    </div>
+    <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid rgba(201,168,76,.12);">
+      <label style="display:flex; align-items:center; gap:.6rem; cursor:pointer; font-size:1rem; color:var(--gold-pale);">
+        <input type="checkbox" class="member-absent" onchange="toggleMemberAbsent(this)">
+        Não poderei comparecer
+      </label>
     </div>`;
   list.appendChild(card);
 }
+
+window.toggleMemberAbsent = function(checkbox) {
+  const card = checkbox.closest('.member-card');
+  const nomeInput = card.querySelector('.member-nome');
+  const nascInput = card.querySelector('.member-nasc');
+  
+  if (checkbox.checked) {
+    card.style.opacity = '0.6';
+    nomeInput.classList.remove('error');
+    nascInput.classList.remove('error');
+    card.querySelectorAll('.field-error').forEach(el => el.classList.remove('visible'));
+  } else {
+    card.style.opacity = '1';
+  }
+};
 
 async function ensureFirstMember() {
   const list = document.getElementById('members-list');
@@ -443,9 +472,9 @@ async function ensureFirstMember() {
   const preMembers = famRef.data().members || [];
   
   if (preMembers.length > 0) {
-    preMembers.forEach((mName, i) => addReadOnlyMember(mName, i + 1));
+    preMembers.forEach((mName, i) => addMemberCard(mName, i + 1));
   } else {
-    addReadOnlyMember("Convidado Principal", 1);
+    addMemberCard("", 1);
   }
 }
 
@@ -454,9 +483,35 @@ function validateStep1() { return !!verifiedCode; }
 function validateStep2() {
   const members = document.querySelectorAll('.member-card'); if (members.length === 0) return false;
   let valid = true;
+  
   members.forEach(card => {
-    const dInp = card.querySelector('.member-nasc');
-    if (!dInp.value) { dInp.classList.add('error'); valid = false; } else dInp.classList.remove('error');
+    const absent = card.querySelector('.member-absent').checked;
+    if (absent) return; // Ignora validação para quem marcou ausência
+
+    const nome = card.querySelector('.member-nome');
+    const nasc = card.querySelector('.member-nasc');
+    const errNome = card.querySelector('.err-nome');
+    const errNasc = card.querySelector('.err-nasc');
+
+    // Valida nome (Mínimo nome e sobrenome)
+    if (!nome.value.trim() || nome.value.trim().split(/\s+/).length < 2) {
+      nome.classList.add('error');
+      if (errNome) errNome.classList.add('visible');
+      valid = false;
+    } else {
+      nome.classList.remove('error');
+      if (errNome) errNome.classList.remove('visible');
+    }
+
+    // Valida data de nascimento
+    if (!nasc.value) {
+      nasc.classList.add('error');
+      if (errNasc) errNasc.classList.add('visible');
+      valid = false;
+    } else {
+      nasc.classList.remove('error');
+      if (errNasc) errNasc.classList.remove('visible');
+    }
   });
   return valid;
 }
@@ -466,15 +521,37 @@ function getMembersData() {
   document.querySelectorAll('.member-card').forEach(card => {
     const nome = card.querySelector('.member-nome').value.trim();
     const nascRaw = card.querySelector('.member-nasc').value;
-    const [y,m,d] = nascRaw.split('-');
-    members.push({ nome, nascimento: `${d}/${m}/${y}` });
+    const absent = card.querySelector('.member-absent').checked;
+    
+    let nascimento = '';
+    if (nascRaw) {
+      const [y,m,d] = nascRaw.split('-');
+      nascimento = `${d}/${m}/${y}`;
+    }
+
+    members.push({ 
+      nome: nome || "Convidado não identificado", 
+      nascimento,
+      comparecera: !absent
+    });
   });
   return members;
 }
 
 function buildReview() {
   const members = getMembersData();
-  document.getElementById('review-box').innerHTML = `<div class="success-names"><span class="success-names-title">Família: ${verifiedFamilyName}</span>` + members.map(m => `<div class="success-name-item"><span>${m.nome}</span><span style="color:var(--gold)">${m.nascimento}</span></div>`).join('') + `</div>`;
+  document.getElementById('review-box').innerHTML = `
+    <div class="success-names">
+      <span class="success-names-title">Família: ${verifiedFamilyName}</span>
+      ${members.map(m => `
+        <div class="success-name-item">
+          <span>${m.nome}</span>
+          <span style="color:${m.comparecera ? '#6dd8a0' : '#e05555'}">
+            ${m.comparecera ? 'Comparecerá' : 'Não comparecerá'}
+          </span>
+        </div>
+      `).join('')}
+    </div>`;
 }
 
 function goToStep(step) {
@@ -511,7 +588,18 @@ async function submitRSVP() {
 function showSuccess(data) {
   document.querySelectorAll('.form-step').forEach(s => s.style.display = 'none'); if (document.getElementById('steps-indicator')) document.getElementById('steps-indicator').style.display = 'none';
   document.getElementById('success-screen').classList.add('visible');
-  document.getElementById('success-names-box').innerHTML = `<span class="success-names-title">${data.familyName} Confirmada!</span>` + data.members.map(m => `<div class="success-name-item"><span>${m.nome}</span></div>`).join('');
+  document.getElementById('success-names-box').innerHTML = `
+    <div class="success-names">
+      <span class="success-names-title">${data.familyName}</span>
+      ${data.members.map(m => `
+        <div class="success-name-item">
+          <span>${m.nome}</span>
+          <span style="color:${m.comparecera ? '#6dd8a0' : '#e05555'}">
+            ${m.comparecera ? 'Confirmado ✓' : 'Não comparecerá ✗'}
+          </span>
+        </div>
+      `).join('')}
+    </div>`;
 }
 
 const canvas = document.getElementById('starfield'); const ctx = canvas.getContext('2d');
